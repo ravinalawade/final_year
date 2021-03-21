@@ -43,4 +43,6 @@ urlpatterns = [
     path('localreport_api/', views.Local_report_api.as_view(), name='localreport_api'),
     path('register/', views.Register_api.as_view(), name='register_api'),
     path('check/', views.Check.as_view(), name='check_api'),
+
+    path('session_api/', views.Session_test.as_view(), name='session_api'),
 ]

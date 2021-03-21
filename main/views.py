@@ -615,6 +615,7 @@ class Login_api(APIView):
         token, created  = Token.objects.get_or_create(user=user)
         if user is not None:
             login(request, user)
+            request.session['data']="Hello "+username
             content = {'message': 'Logged in ','token':token.key}
         else:
             # Return an 'invalid login' error message.
@@ -691,3 +692,9 @@ class Check(APIView):
             print("1")
             return Response("1")
         return Response("0")
+
+class Session_test(APIView):
+    def post(self,request):
+        permission_classes = (IsAuthenticated,)
+        print(request.session['data'])
+        return("Hello world")
