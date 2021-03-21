@@ -704,16 +704,15 @@ class Local_report_api(APIView):
 class Check(APIView):
     def post(self,request):
         print("checking email id",request.data['email'])
-        u=User.objects.get(username=request.data['email'])
-        flag="0"
-        if u:
-            # u=User.objects.get(username=request.data['email'])
+        try:
+            u=User.objects.get(username=request.data['email'])
             if u.password == request.data['email']:
                 flag="3"
             else:
                 flag="2"
-        else:
+        except ObjectDoesNotExist:
             flag="1"
+       
         print(flag)
         return Response(flag)
 
