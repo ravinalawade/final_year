@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated 
 
 from django.shortcuts import render,redirect
+from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
@@ -630,7 +631,7 @@ class Login_api(APIView):
         else:
             # Return an 'invalid login' error message.
             u=User.objects.get(username=username)
-            if u.password == 'forestweb':
+            if check_password('forestweb', u.password)::
                 content = {'message': 'Please register','email':True,'password':False,'password_registration':False}
             else:
                 content = {'message': 'Not register','email':False,'password':False,'password_registration':False}
@@ -708,7 +709,7 @@ class Check(APIView):
         try:
             u=User.objects.get(username=request.data['email'])
             print(u.password)
-            if u.password == 'forestweb':
+            if check_password('forestweb', u.password):
                 flag=3
             else:
                 flag=2
