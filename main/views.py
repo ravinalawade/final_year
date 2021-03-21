@@ -707,6 +707,7 @@ class Check(APIView):
         print("checking email id",request.data['email'])
         try:
             u=User.objects.get(username=request.data['email'])
+            print(u.password)
             if u.password == 'forestweb':
                 flag=3
             else:
