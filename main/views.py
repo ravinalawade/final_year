@@ -708,11 +708,11 @@ class Check(APIView):
         try:
             u=User.objects.get(username=request.data['email'])
             if u.password == request.data['email']:
-                flag="3"
+                flag=3
             else:
-                flag="2"
+                flag=2
         except ObjectDoesNotExist:
-            flag="1"
+            flag=1
        
         print(flag)
         return Response(flag)
