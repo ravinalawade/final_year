@@ -616,10 +616,24 @@ class Login_api(APIView):
         if user is not None:
             login(request, user)
             request.session['data']="Hello "+username
-            content = {'message': 'Logged in ','token':token.key}
+            f=Forest_employee.objects.get(user=user)
+            dic={}
+            dic['name']=f.name
+            dic['designation']=f.role
+            dic['beat']=f.area
+            r=Range_beat.objects.get(beat_id=f.area)
+            dic['range']=r.range_id
+            d=Division_range.objects.get(range_id=r.range_id)
+            dic['division']=d.division_id
+            content = {'message': 'Logged in ','token':token.key,'email':True,'password':True,'password_registration':True,'user':dic}
         else:
             # Return an 'invalid login' error message.
-            content = {'message': 'Hello, World!'}
+            u=User.objects.get(username=username)
+            if u.password == username:
+                content = {'message': 'Please register','email':True,'password':False,'password_registration':False}
+            else:
+                content = {'message': 'Not register','email':False,'password':False,'password_registration':False}
+            # content = {'message': 'Hello, World!'}
         return Response(content)
 
 class Logout_api(APIView):
@@ -650,7 +664,9 @@ class Register_api(APIView):
     def post(self,request):
         username = request.data['username']
         password = request.data['password']
-        create = User.objects.create_user(username,username,password)
+        # create = User.objects.create_user(username,username,password)
+        u=User.objects.get(username=username)
+        u.set_password(password)
         
         user = authenticate(request, username=username, password=password)
         token, created  = Token.objects.get_or_create(user=user)
@@ -687,11 +703,17 @@ class Local_report_api(APIView):
 class Check(APIView):
     def post(self,request):
         print("checking email id",request.data['email'])
-        email=Email.objects.filter(email=request.data['email'])
-        if email:
-            print("1")
-            return Response("1")
-        return Response("0")
+        u=User.objects.get(username=request.data['email'])
+        flag="0"
+        if u:
+            # u=User.objects.get(username=request.data['email'])
+            if u.password == request.data['email']:
+                flag="3"
+            else:
+                flag="2"
+        else:
+            flag="1"
+        return Response(flag)
 
 class Session_test(APIView):
     def post(self,request):
