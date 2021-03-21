@@ -610,7 +610,7 @@ class Login_api(APIView):
 
     def post(self, request):
         print(request.data)
-        username = request.data['username']
+        username = request.data['email']
         password = request.data['password']
         
         user = authenticate(request, username=username, password=password)
@@ -665,7 +665,7 @@ class Logout_api(APIView):
 
 class Register_api(APIView):
     def post(self,request):
-        username = request.data['username']
+        username = request.data['email']
         password = request.data['password']
         # create = User.objects.create_user(username,username,password)
         u=User.objects.get(username=username)
