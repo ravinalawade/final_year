@@ -670,6 +670,7 @@ class Register_api(APIView):
         # create = User.objects.create_user(username,username,password)
         u=User.objects.get(username=username)
         u.set_password(password)
+        u.save()
         print("password changed")
         user = authenticate(request, username=username, password=password)
         if user is not None:
