@@ -631,7 +631,7 @@ class Login_api(APIView):
         else:
             # Return an 'invalid login' error message.
             u=User.objects.get(username=username)
-            if check_password('forestweb', u.password)::
+            if check_password('forestweb', u.password):
                 content = {'message': 'Please register','email':True,'password':False,'password_registration':False}
             else:
                 content = {'message': 'Not register','email':False,'password':False,'password_registration':False}
