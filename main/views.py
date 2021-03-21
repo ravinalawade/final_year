@@ -674,7 +674,7 @@ class Register_api(APIView):
         token, created  = Token.objects.get_or_create(user=user)
         if user is not None:
             login(request, user)
-            content = {'message': 'Registered and Logged in ','token':token.key}
+            content = {'message': 'Registered and Logged in ','token':token.key,'status':True}
         return Response(content)
 
 class Report_api(APIView):
@@ -715,7 +715,8 @@ class Check(APIView):
             flag=1
        
         print(flag)
-        return Response(flag)
+        rep={"email":flag}
+        return Response(rep)
 
 class Session_test(APIView):
     def post(self,request):
