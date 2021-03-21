@@ -623,6 +623,7 @@ class Login_api(APIView):
             dic['name']=f.name
             dic['designation']=f.role
             dic['beat']=f.area
+            dic['empid']=f.empid
             r=Range_beat.objects.get(beat_id=f.area)
             dic['range']=r.range_id
             d=Division_range.objects.get(range_id=r.range_id)
@@ -682,6 +683,7 @@ class Register_api(APIView):
 class Report_api(APIView):
     def post(self,request):
         r=Report()
+        #employee email
         r.rid=request.data['rid']
         r.timestamp=request.data['timestamp']
         r.empid=request.data['empid']
@@ -725,4 +727,4 @@ class Session_test(APIView):
     def post(self,request):
         permission_classes = (IsAuthenticated,)
         print(request.session['data'])
-        return("Hello world")
+        return({"session":"Hello World"})
