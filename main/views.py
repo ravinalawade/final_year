@@ -672,8 +672,8 @@ class Register_api(APIView):
         u.set_password(password)
         print("password changed")
         user = authenticate(request, username=username, password=password)
-        token, created  = Token.objects.get_or_create(user=user)
         if user is not None:
+            token, created  = Token.objects.get_or_create(user=user)
             login(request, user)
             content = {'message': 'Registered and Logged in ','token':token.key,'status':True}
         return Response(content)
