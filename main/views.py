@@ -634,6 +634,7 @@ class Login_api(APIView):
             else:
                 content = {'message': 'Not register','email':False,'password':False,'password_registration':False}
             # content = {'message': 'Hello, World!'}
+        print(content)
         return Response(content)
 
 class Logout_api(APIView):
@@ -667,7 +668,7 @@ class Register_api(APIView):
         # create = User.objects.create_user(username,username,password)
         u=User.objects.get(username=username)
         u.set_password(password)
-        
+        print("password changed")
         user = authenticate(request, username=username, password=password)
         token, created  = Token.objects.get_or_create(user=user)
         if user is not None:
@@ -713,6 +714,7 @@ class Check(APIView):
                 flag="2"
         else:
             flag="1"
+        print(flag)
         return Response(flag)
 
 class Session_test(APIView):
