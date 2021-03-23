@@ -22,7 +22,6 @@ import datetime
 
 ############################SERVER########################################
 def logout_server(request):
-    request.user.auth_token.delete()
     logout(request)
     return redirect('login_server')
 
@@ -42,7 +41,7 @@ def info(request):
         login(request, user)
     print(request.user.username)
     f=Forest_employee.objects.get(user=request.user)
-    request.session['data']={'area':f.area,'empid':f.empid}
+    request.session['data']={'area':f.area,'empid':f.empid,'role':f.role}
     request.session['flag']=f.role
     print(f.role,"this is role")
     if f.role=="admin":
@@ -102,7 +101,7 @@ def addforest_employee(request):
         password=request.POST['password']
         print(username,password)
         count=Forest_employee.objects.count()
-        temp='id_'+(str(count+1))
+        temp='id-'+(str(count+1))
         create = User.objects.create_user(username,username,password)
         user=Forest_employee.objects.create(user=create,empid=temp,area=request.POST['area'],name=request.POST['name'],role=request.POST['role'],latitude=[0.0],longitude=[0.0])
         return render(request,"done.html",{})  
@@ -397,8 +396,7 @@ def reportlist(request):
     # rep=Report.objects.all()
     data=request.session.get('data')
     print(data)
-    work_id=data['area'].split("_")
-    work_id=work_id[0]
+    work_id=data['role']
     print(work_id)
     
     if work_id=='admin':
@@ -431,7 +429,7 @@ def reportlist(request):
                         e[k.empid]=[]
                         for l in reports:
                             rep_dic={}
-                            rep_dic['rid']=l.rid
+                            rep_dic['rep_id']=l.rid
                             rep_dic['timestamp']=l.timestamp
                             rep_dic['empid']=l.empid
                             rep_dic['description']=l.description
@@ -450,7 +448,7 @@ def reportlist(request):
         main_dict=div
         
     
-    elif work_id=='d':
+    elif work_id=='division_incharge':
         ran={}
         #code for particular division
         lrange=Division_range.objects.filter(division_id=data['area'])
@@ -470,18 +468,19 @@ def reportlist(request):
                 be[beat_id]={}
                 e={}
                 for k in employee:
+                    print(k.empid)
                     emp=Forest_employee.objects.get(empid=k.empid)
                     reports=Report.objects.filter(empid=(emp.empid+'-'+emp.name))
                     e[k.empid]=[]
-                    for k in reports:
+                    for l in reports:
                         rep_dic={}
-                        rep_dic['rid']=l.rid
+                        rep_dic['rep_id']=l.rid
                         rep_dic['timestamp']=l.timestamp
-                        rep_dic['empid']=k.empid
-                        rep_dic['description']=k.description
-                        rep_dic['image']=bytes(k.image).decode("utf-8") 
-                        rep_dic['latitude']=k.latitude
-                        rep_dic['longitude']=k.longitude
+                        rep_dic['empid']=l.empid
+                        rep_dic['description']=l.description
+                        rep_dic['image']=bytes(l.image).decode("utf-8") 
+                        rep_dic['latitude']=l.latitude
+                        rep_dic['longitude']=l.longitude
                         e[k.empid].append(rep_dic)
                         # if k.empid in tem_dict[range_id]:
                         #     tem_dict[range_id][k.empid].append(rep_dic)
@@ -493,7 +492,7 @@ def reportlist(request):
         main_dict=ran
     
     
-    elif work_id=='r':
+    elif work_id=='range_incharge':
         range_id=data['area']
         lbeat=Range_beat.objects.filter(range_id=i.range_id)
         # list of beats in a particular range
@@ -509,15 +508,15 @@ def reportlist(request):
                 emp=Forest_employee.objects.get(empid=k.empid)
                 reports=Report.objects.filter(empid=(emp.empid+'-'+emp.name))
                 e[k.empid]=[]
-                for k in reports:
+                for l in reports:
                     rep_dic={}
-                    rep_dic['rid']=l.rid
+                    rep_dic['rep_id']=l.rid
                     rep_dic['timestamp']=l.timestamp
-                    rep_dic['empid']=k.empid
-                    rep_dic['description']=k.description
-                    rep_dic['image']=bytes(k.image).decode("utf-8") 
-                    rep_dic['latitude']=k.latitude
-                    rep_dic['longitude']=k.longitude
+                    rep_dic['empid']=l.empid
+                    rep_dic['description']=l.description
+                    rep_dic['image']=bytes(l.image).decode("utf-8") 
+                    rep_dic['latitude']=l.latitude
+                    rep_dic['longitude']=l.longitude
                     e[k.empid].append(rep_dic)
                     # if k.empid in tem_dict[range_id]:
                     #     tem_dict[range_id][k.empid].append(rep_dic)
@@ -528,7 +527,7 @@ def reportlist(request):
         main_dict=be
     
     
-    elif work_id=='b':
+    elif work_id=='beat_incharge':
         beat_id=data['area']
         employee=Beat_employee.objects.filter(beat_id=beat_id)
         #list of employees in a particular beat
@@ -537,21 +536,21 @@ def reportlist(request):
             emp=Forest_employee.objects.get(empid=k.empid)
             reports=Report.objects.filter(empid=(emp.empid+'-'+emp.name))
             e[k.empid]=[]
-            for k in reports:
+            for l in reports:
                 rep_dic={}
-                rep_dic['rid']=l.rid
+                rep_dic['rep_id']=l.rid
                 rep_dic['timestamp']=l.timestamp
-                rep_dic['empid']=k.empid
-                rep_dic['description']=k.description
-                rep_dic['image']=bytes(k.image).decode("utf-8") 
-                rep_dic['latitude']=k.latitude
-                rep_dic['longitude']=k.longitude
+                rep_dic['empid']=l.empid
+                rep_dic['description']=l.description
+                rep_dic['image']=bytes(l.image).decode("utf-8") 
+                rep_dic['latitude']=l.latitude
+                rep_dic['longitude']=l.longitude
                 e[k.empid].append(rep_dic)
         main_dict=e
     
             #sort the array
     print(main_dict,work_id)
-    return render(request,"reportlist.html",{"main_dict":main_dict,"flag":work_id})
+    return render(request,"reportlist.html",{"main_dict":main_dict,"flag":{'flag':work_id}})
 
 def localreportlist(request):
     r=Local_report.objects.all()
@@ -737,6 +736,7 @@ class Report_api(APIView):
         r.empid=request.data['empid']
         res = bytes(request.data['image'], 'utf-8')
         r.image=res
+        r.rtype=request.data['type']
         r.description=request.data['description']
         r.latitude=request.data['latitude']
         r.longitude=request.data['longitude']
@@ -749,6 +749,7 @@ class Local_report_api(APIView):
         r.empid=request.data['empid']
         res = bytes(request.data['image'], 'utf-8')
         r.image=res
+        r.rtype=request.data['type']
         r.description=request.data['description']
         r.latitude=request.data['latitude']
         r.longitude=request.data['longitude']
