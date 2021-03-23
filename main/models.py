@@ -24,6 +24,7 @@ class Forest_employee(models.Model):
 class Report(models.Model):
     rid = models.CharField(max_length=200)
     empid = models.CharField(max_length=200)
+    rtype = models.CharField(max_length=1000)
     description = models.CharField(max_length=1000)
     image = models.BinaryField()
     latitude = models.FloatField()
@@ -59,6 +60,7 @@ class Beat_employee(models.Model):
 
 class Local_report(models.Model):
     lrid = models.CharField(max_length=200)
+    rtype = models.CharField(max_length=1000)
     description = models.CharField(max_length=1000)
     phone_no = models.CharField(max_length=10)
     image = models.BinaryField()
