@@ -134,7 +134,7 @@ class Logs(models.Model):
     def __str__(self):
         return self.camera_id
 
-class Status(models.Model):
+class Status(models.Model):####FOR CHECKING CAMERA BUFFER
     camera_id = models.CharField(max_length=200)
     time = models.CharField(max_length=200)
     action = models.CharField(max_length=200)

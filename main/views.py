@@ -2,6 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from background_task import background
+import subprocess
 
 from django.shortcuts import render,redirect
 from django.contrib.auth.hashers import check_password
@@ -14,9 +18,11 @@ from .models import *
 from django.http import HttpResponse,JsonResponse
 import json
 import xlsxwriter
+import datetime
 
 ############################SERVER########################################
 def logout_server(request):
+    request.user.auth_token.delete()
     logout(request)
     return redirect('login_server')
 
@@ -603,6 +609,48 @@ def getexcelanimal(request):
     response['Content-Disposition'] = 'attachment; filename=data.xlsx'
     return response
 
+
+######BACK GROUND TASK########
+@background(schedule=2)
+def back():
+    a=0
+    print("in back new","ravi")
+    # while(a<10):
+    a+=1
+    print(a)
+    l=[]
+    lon={}
+    lat={}
+    time={}
+    c=Camera.objects.all()
+    l=set(l)
+    
+    for i in c:
+        l.add(str(i.camera_id))
+        lon[str(i.camera_id)]=i.longitude
+        lat[str(i.camera_id)]=i.latitude
+    s=[]
+    temp=Status.objects.all()
+    s=set(s)
+    now = datetime.datetime.now()
+    for i in temp:
+        # time[str(i.camera_id)]=i.time
+        s.add(str(i.camera_id))
+    ans=l-s
+    if (len(ans)!=0):
+        xyz=list(ans)
+        print(time)
+        for i in xyz:
+            async_to_sync(get_channel_layer().group_send)(
+                'alert',
+                {
+                    'type': 'alert_message',
+                    'message': "Alert message from Camera not working"
+                }
+            )
+            
+    d=Status.objects.all().delete()
+
 #############################API##########################################
 
 class Login_api(APIView):
@@ -653,7 +701,7 @@ class Logout_api(APIView):
         print(User.objects.filter(id__in=user_id_list))
         #
 
-        # print(request.data)
+        print(request.user)
         request.user.auth_token.delete()
         logout(request)
         active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
@@ -662,7 +710,7 @@ class Logout_api(APIView):
             data = session.get_decoded()
             user_id_list.append(data.get('_auth_user_id', None))
         print(User.objects.filter(id__in=user_id_list))
-        return Response(content)
+        return Response("Logged out")
 
 class Register_api(APIView):
     def post(self,request):
@@ -684,8 +732,8 @@ class Report_api(APIView):
     def post(self,request):
         r=Report()
         #employee email
-        r.rid=request.data['rid']
-        r.timestamp=request.data['timestamp']
+        r.rid='id_'+str(Report.objects.count())
+        r.timestamp=str(datetime.datetime.now())
         r.empid=request.data['empid']
         res = bytes(request.data['image'], 'utf-8')
         r.image=res
@@ -727,4 +775,112 @@ class Session_test(APIView):
     def post(self,request):
         permission_classes = (IsAuthenticated,)
         print(request.session['data'])
-        return({"session":"Hello World"})
+        return Response("Hello World")
+
+class Demoalert(APIView):
+    def post(self,request):
+        # async_to_sync(get_channel_layer().group_send)(
+        #         'alert',
+        #         {
+        #             'type': 'alert_message',
+        #             'message': "Alert message"
+        #         }
+        #     )
+        # return Response({"data":"Ravi"})
+
+        now = datetime.datetime.now()
+        if(request.data['type']=="local-alert"):
+            print(request.data['type'])
+            # c = db.collection(u'camera').document('local-alert')
+            # c.set({
+            #     u'latitude': request.data['latitude'],
+            #     u'longitude': request.data['longitude'],
+            #     u'time' : request.data['timestamp']
+            # })
+            # time.sleep(5)
+            # c.set({
+                
+            # })
+            async_to_sync(get_channel_layer().group_send)(
+                'alert',
+                {
+                    'type': 'alert_message',
+                    'message': "Alert message from Local alert"
+                }
+            )
+        else:
+            if(request.data['type']=="working"):
+                x=Status()
+                x.latitude=float(request.data['latitude'])
+                x.longitude=float(request.data['longitude'])
+                x.camera_id=request.data['value']
+                x.action=request.data['type']
+                x.time=str(request.data['timestamp'])
+                x.save()
+                ###Status table will have working cameras info for 5 min within 5 min it should check that which camera dosent send the request
+
+            elif (request.data['type']=="hunter"):
+                async_to_sync(get_channel_layer().group_send)(
+                    'alert',
+                    {
+                        'type': 'alert_message',
+                        'message': "Alert message from Hunter"
+                    }
+                )
+                x=Logs()
+                x.latitude=float(request.data['latitude'])
+                x.longitude=float(request.data['longitude'])
+                x.camera_id=request.data['value']
+                x.action=request.data['type']
+                x.time=str(request.data['timestamp'])
+                x.save()
+                # c = db.collection(u'camera').document('hunter')
+                # c.set({
+                #     u'camera_id': request.data['value'],
+                #     u'latitude': request.data['latitude'],
+                #     u'longitude': request.data['longitude'],
+                #     u'time' : request.data['timestamp']
+                # })
+                # time.sleep(5)
+                # c.set({
+                    
+                # })
+            elif request.data['type']=="sos":
+                x=Logs()
+                x.latitude=21.23
+                x.longitude=73.75
+                x.camera_id=request.data['value']
+                x.action=request.data['type']
+                x.time=str(request.data['timestamp'])
+                x.save()
+                async_to_sync(get_channel_layer().group_send)(
+                    'alert',
+                    {
+                        'type': 'alert_message',
+                        'message': "Alert message From SOS"
+                    }
+                )
+
+            else:
+                x=Logs()
+                x.latitude=float(request.data['latitude'])
+                x.longitude=float(request.data['longitude'])
+                x.camera_id=request.data['value']
+                x.action=request.data['type']
+                x.time=str(request.data['timestamp'])
+                x.save()
+                async_to_sync(get_channel_layer().group_send)(
+                'alert',
+                    {
+                        'type': 'alert_message',
+                        'message': "Alert message Something is detected"
+                    }
+                )
+            
+        return Response(status=status.HTTP_201_CREATED)
+
+class backtask(APIView):
+    def post(self,request,format=None):
+        back(repeat=5,repeat_until=datetime.datetime.now()+datetime.timedelta(0,600))
+        process = subprocess.Popen(['python', 'manage.py','process_tasks'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return Response(status=status.HTTP_201_CREATED)
