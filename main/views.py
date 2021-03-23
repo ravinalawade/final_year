@@ -731,9 +731,9 @@ class Report_api(APIView):
     def post(self,request):
         r=Report()
         #employee email
-        r.rid='id_'+str(Report.objects.count())
+        r.rid='id-'+str(Report.objects.count())
         r.timestamp=str(datetime.datetime.now())
-        r.empid=request.data['empid']
+        r.empid=request.data['empid']-request.data['name']
         res = bytes(request.data['image'], 'utf-8')
         r.image=res
         r.rtype=request.data['type']
