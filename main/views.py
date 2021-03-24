@@ -742,7 +742,7 @@ class Report_api(APIView):
         r.latitude=request.data['latitude']
         r.longitude=request.data['longitude']
         r.save()
-        return Response(True)
+        return Response({"status":True})
 
 class Local_report_api(APIView):
     def post(self,request):
