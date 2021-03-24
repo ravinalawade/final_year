@@ -729,6 +729,7 @@ class Register_api(APIView):
 
 class Report_api(APIView):
     def post(self,request):
+        permission_classes = (IsAuthenticated,)
         r=Report()
         #employee email
         r.rid='id-'+str(Report.objects.count())
@@ -741,7 +742,7 @@ class Report_api(APIView):
         r.latitude=request.data['latitude']
         r.longitude=request.data['longitude']
         r.save()
-        return Response("Uploaded")
+        return Response(True)
 
 class Local_report_api(APIView):
     def post(self,request):
