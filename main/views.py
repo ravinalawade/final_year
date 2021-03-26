@@ -164,6 +164,8 @@ def addtask(request):
         t.task_id='id_'+(str(count+1))
         t.task_from=request.session.get('data')['area']
         t.task_info=request.POST.get("task_info")
+        t.task_name=request.POST.get("task_name")
+        t.task_type=request.POST.get("task_type")
         t.task_to=request.POST.get("task_to")
         t.status='assigned'
         t.deadline=request.POST.get("deadline")
@@ -176,6 +178,8 @@ def addtask(request):
         t.task_id='id_'+(str(count+1))
         t.task_from=request.session.get('data')['area']
         t.task_info=request.POST.get("task_info")
+        t.task_name=request.POST.get("task_name")
+        t.task_type=request.POST.get("task_type")
         t.task_to=request.POST.get("task_to")
         t.status='incomplete'
         t.deadline=request.POST.get("deadline")
@@ -209,6 +213,8 @@ def assigntask(request):
             ta.task_id=task.task_id
             ta.task_from=task.task_to
             ta.task_info=task.task_info
+            ta.task_name=task.task_name
+            ta.task_type=task.task_type
             ta.task_to=request.POST['task_to']
             ta.status='incomplete'
             ta.deadline=task.deadline.strftime('%Y-%m-%d')
@@ -237,11 +243,29 @@ def assigntask(request):
             ta.task_id=task.task_id
             ta.task_from=task.task_to
             ta.task_info=task.task_info
+            ta.task_name=task.task_name
+            ta.task_type=task.task_type
             ta.task_to=request.POST['task_to']
             ta.status='incomplete'
             ta.deadline=task.deadline.strftime('%Y-%m-%d')
             ta.save()
             print(ta)
+            
+            se={}
+            se["response_type"]="task"
+            se["id"]=ta.task_id
+            se["name"]=ta.task_name
+            se["type"]=ta.task_type
+            se["description"]=ta.task_info
+            se["assigning_offcier"]=ta.task_to
+            se["deadline"]=ta.deadline
+            async_to_sync(get_channel_layer().group_send)(
+                request.POST['task_to'],
+                {
+                    'type': 'task_message',
+                    'message': json.dumps(se)
+                }
+            )
 
             # t=Range_tasks()
             # t.task_id=task.task_id
@@ -671,6 +695,7 @@ class Login_api(APIView):
             dic['designation']=f.role
             dic['beat']=f.area
             dic['empid']=f.empid
+            request.session['empid']=f.empid+"-"+f.name
             r=Range_beat.objects.get(beat_id=f.area)
             dic['range']=r.range_id
             d=Division_range.objects.get(range_id=r.range_id)
@@ -879,10 +904,10 @@ class Demoalert(APIView):
                     }
                 )
             
-        return Response(status=status.HTTP_201_CREATED)
+        return Response("done")
 
 class backtask(APIView):
     def post(self,request,format=None):
         back(repeat=5,repeat_until=datetime.datetime.now()+datetime.timedelta(0,600))
         process = subprocess.Popen(['python', 'manage.py','process_tasks'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return Response(status=status.HTTP_201_CREATED)
+        return Response("done")

@@ -34,9 +34,12 @@ class Report(models.Model):
         return self.empid
 
 class Task_Description(models.Model):
+    empid = models.CharField(max_length=200)
     task_id = models.CharField(max_length=200)
     description = models.CharField(max_length=1000)
     image = models.BinaryField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     def __str__(self):
         return self.task_id
 
@@ -88,44 +91,52 @@ class Camera(models.Model):
         return self.camera_id
 
 class Tasks(models.Model):
-	task_id = models.CharField(max_length=200)
-	task_info = models.CharField(max_length=200)
-	deadline = models.DateField()
-	task_from = models.CharField(max_length=200)
-	task_to = models.CharField(max_length=200)
-	status = models.CharField(max_length=200)
-	def __str__(self):
-		return self.task_id
+    task_id = models.CharField(max_length=200)
+    task_name = models.CharField(max_length=200)
+    task_type =models.CharField(max_length=200)
+    task_info = models.CharField(max_length=200)
+    deadline = models.DateField()
+    task_from = models.CharField(max_length=200)
+    task_to = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    def __str__(self):
+        return self.task_id
 
 class Beat_tasks(models.Model):
-	task_id = models.CharField(max_length=200)
-	task_info = models.CharField(max_length=200)
-	deadline = models.DateField()
-	task_from = models.CharField(max_length=200)
-	task_to = models.CharField(max_length=200)
-	status = models.CharField(max_length=200)
-	def __str__(self):
-		return self.task_id
+    task_id = models.CharField(max_length=200)
+    task_info = models.CharField(max_length=200)
+    task_name = models.CharField(max_length=200)
+    task_type =models.CharField(max_length=200)
+    deadline = models.DateField()
+    task_from = models.CharField(max_length=200)
+    task_to = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    def __str__(self):
+        return self.task_id
 
 class Range_tasks(models.Model):
-	task_id = models.CharField(max_length=200)
-	task_info = models.CharField(max_length=200)
-	deadline = models.DateField()
-	task_from = models.CharField(max_length=200)
-	task_to = models.CharField(max_length=200)
-	status = models.CharField(max_length=200)
-	def __str__(self):
-		return self.task_id
+    task_id = models.CharField(max_length=200)
+    task_info = models.CharField(max_length=200)
+    task_name = models.CharField(max_length=200)
+    task_type =models.CharField(max_length=200)
+    deadline = models.DateField()
+    task_from = models.CharField(max_length=200)
+    task_to = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    def __str__(self):
+        return self.task_id
 
 class Division_tasks(models.Model):
-	task_id = models.CharField(max_length=200)
-	task_info = models.CharField(max_length=200)
-	deadline = models.DateField()
-	task_from = models.CharField(max_length=200)
-	task_to = models.CharField(max_length=200)
-	status = models.CharField(max_length=200)
-	def __str__(self):
-		return self.task_id
+    task_id = models.CharField(max_length=200)
+    task_info = models.CharField(max_length=200)
+    task_name = models.CharField(max_length=200)
+    task_type =models.CharField(max_length=200)
+    deadline = models.DateField()
+    task_from = models.CharField(max_length=200)
+    task_to = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
+    def __str__(self):
+        return self.task_id
 
 class Logs(models.Model):
     camera_id = models.CharField(max_length=200)
