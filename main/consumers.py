@@ -4,6 +4,8 @@ from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 from rest_framework.permissions import IsAuthenticated 
 from django.contrib.sessions.models import Session
+from rest_framework.authtoken.models import Token
+from .models import *
 
 class Web_socket(WebsocketConsumer):
     def connect(self):
@@ -28,11 +30,13 @@ class Web_socket(WebsocketConsumer):
     def receive(self, text_data):
         print("recieving",text_data)
         token=text_data
-        s=Session.objects.get(pk=token)
-        data=s.session_data.get_decoded()
+        s=Token.objects.get(key=token).user
+        print(s)
+        data=Forest_employee.objects.get(user=s)
+        data=data.empid+"-"+data.name
         print(data)
         async_to_sync(get_channel_layer().group_add)(
-            data['empid'],
+            data,
             self.channel_name
         )
         # text_data_json = json.loads(text_data)
