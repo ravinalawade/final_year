@@ -664,11 +664,18 @@ def back():
         xyz=list(ans)
         print(time)
         for i in xyz:
+            c=Camera.objects.get(camera_id=i)
+            d={}
+            d["camera_id"]=c.camera_id
+            d["latitude"]=c.latitude
+            d["longitude"]=c.longitude
+            d["timestamp"]=str(datetime.datetime.now())
+            d["type"]="working"
             async_to_sync(get_channel_layer().group_send)(
                 'alert',
                 {
                     'type': 'alert_message',
-                    'message': "Alert message from Camera not working"
+                    'message': json.dumps(d)
                 }
             )
             
@@ -853,27 +860,27 @@ class Alertapi(APIView):
                 x=Status()
                 x.latitude=float(request.data['latitude'])
                 x.longitude=float(request.data['longitude'])
-                x.camera_id=request.data['value']
+                x.camera_id=request.data['camera_id']
                 x.action=request.data['type']
                 x.time=str(request.data['timestamp'])
                 x.save()
                 ###Status table will have working cameras info for 5 min within 5 min it should check that which camera dosent send the request
 
             elif (request.data['type']=="hunter"):
+                x=Logs()
+                x.latitude=float(request.data['latitude'])
+                x.longitude=float(request.data['longitude'])
+                x.camera_id=request.data['camera_id']
+                x.action=request.data['type']
+                x.time=str(request.data['timestamp'])
+                x.save()
                 async_to_sync(get_channel_layer().group_send)(
                     'alert',
                     {
                         'type': 'alert_message',
-                        'message': "Alert message from Hunter"
+                        'message': json.dumps(x)
                     }
                 )
-                x=Logs()
-                x.latitude=float(request.data['latitude'])
-                x.longitude=float(request.data['longitude'])
-                x.camera_id=request.data['value']
-                x.action=request.data['type']
-                x.time=str(request.data['timestamp'])
-                x.save()
                 # c = db.collection(u'camera').document('hunter')
                 # c.set({
                 #     u'camera_id': request.data['value'],
@@ -886,18 +893,22 @@ class Alertapi(APIView):
                     
                 # })
             elif request.data['type']=="sos":
-                x=Logs()
+                x=Sos()
                 x.latitude=21.23
                 x.longitude=73.75
-                x.camera_id=request.data['value']
+                x.camera_id=request.data['camera_id']
                 x.action=request.data['type']
                 x.time=str(request.data['timestamp'])
+                x.sos_type=request.data['sos_type']
+                x.name=request.data['name']
+                x.phone_number=request.data['phone_number']
+                x.address=request.data['address']
                 x.save()
                 async_to_sync(get_channel_layer().group_send)(
                     'alert',
                     {
                         'type': 'alert_message',
-                        'message': "Alert message From SOS"
+                        'message': json.dumps(x)
                     }
                 )
 
@@ -917,7 +928,7 @@ class Alertapi(APIView):
                     }
                 )
             
-        return Response("done")
+        return Response({"status":True})
 
 class backtask(APIView):
     def post(self,request,format=None):

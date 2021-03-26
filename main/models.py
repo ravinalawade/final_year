@@ -147,6 +147,19 @@ class Logs(models.Model):
     def __str__(self):
         return self.camera_id
 
+class Sos(models.Model):
+    camera_id = models.CharField(max_length=200)
+    time = models.CharField(max_length=200)
+    action = models.CharField(max_length=200)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    sos_type=models.CharField(max_length=200)
+    name=models.CharField(max_length=200)
+    phone_number=models.CharField(max_length=200)
+    address=models.CharField(max_length=200)
+    def __str__(self):
+        return self.sos_type
+
 class Status(models.Model):####FOR CHECKING CAMERA BUFFER
     camera_id = models.CharField(max_length=200)
     time = models.CharField(max_length=200)
