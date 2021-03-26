@@ -3,17 +3,14 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 from rest_framework.permissions import IsAuthenticated 
+from django.contrib.sessions.models import Session
 
 class Web_socket(WebsocketConsumer):
     def connect(self):
         # Join room group
         print("connecting")
-        permission_classes = (IsAuthenticated,)
         # emp=request.session['empid']
-        async_to_sync(get_channel_layer().group_add)(
-            request.session['empid'],
-            self.channel_name
-        )
+        
         async_to_sync(get_channel_layer().group_add)(
             "alert",
             self.channel_name
@@ -23,13 +20,21 @@ class Web_socket(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            request.session['empid'],
+            "alert",
             self.channel_name
         )
 
     # Receive message from WebSocket
     def receive(self, text_data):
         print("recieving",text_data)
+        token=text_data
+        s=Session.objects.get(pk=token)
+        data=s.session_data.get_decoded()
+        print(data)
+        async_to_sync(get_channel_layer().group_add)(
+            data['empid'],
+            self.channel_name
+        )
         # text_data_json = json.loads(text_data)
         # message = text_data_json
 

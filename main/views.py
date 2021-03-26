@@ -781,6 +781,19 @@ class Local_report_api(APIView):
         r.longitude=request.data['longitude']
         r.save()
 
+class Taskreport(APIView):
+    def post(self,request):
+        t=Task_Description()
+        t.task_id=request.data["taskID"]
+        t.empid=request.data["empid"]
+        t.description=request.data["report"]
+        t.latitude=request.data["latitude"]
+        t.longitude=request.data["longitude"]
+        t.save()
+        return Response({"status":True})
+
+        
+
 class Check(APIView):
     def post(self,request):
         print("checking email id",request.data['email'])
