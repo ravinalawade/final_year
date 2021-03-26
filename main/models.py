@@ -24,7 +24,7 @@ class Forest_employee(models.Model):
 class Report(models.Model):
     rid = models.CharField(max_length=200)
     empid = models.CharField(max_length=200)
-    rtype = models.CharField(max_length=1001)
+    rtype = models.CharField(max_length=1002)
     description = models.CharField(max_length=1000)
     image = models.BinaryField()
     latitude = models.FloatField()
