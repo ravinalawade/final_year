@@ -199,7 +199,7 @@ def addtask(request):
 def assigntask(request):
     if request.method == 'POST':
         print(request.POST)
-        x=request.POST['task_to'].split('_')
+        x=request.POST['task_to'].split('-')
         ###RANGE OFFICER ASSIGNING TASK TO BEAT OFFICER
         # if x[0]!='r' and x[0]!='d':
         if x[0]=='b':
