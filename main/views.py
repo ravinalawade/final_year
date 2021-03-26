@@ -128,7 +128,7 @@ def task(request):
         ##w=workers range officer will assign to this workers
         for i in lb:
             beat_id=i.beat_id
-            w.append(Forest_employee.objects.get(area=beat_id))
+            w.append(beat_id)
 
     elif role == 'beat_incharge':
         # area=info['area']
