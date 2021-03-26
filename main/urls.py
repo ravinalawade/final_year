@@ -48,5 +48,5 @@ urlpatterns = [
 
     #############TESTING########################
     path('session_api/', views.Session_test.as_view(), name='session_api'),
-    path('test_alert/', views.Demoalert.as_view(), name='test_alert'),
+    path('alert_api/', views.Alertapi.as_view(), name='alert_api'),
 ]

@@ -817,7 +817,7 @@ class Session_test(APIView):
         print(request.session['data'])
         return Response("Hello World")
 
-class Demoalert(APIView):
+class Alertapi(APIView):
     def post(self,request):
         # async_to_sync(get_channel_layer().group_send)(
         #         'alert',
