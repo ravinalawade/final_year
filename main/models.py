@@ -148,9 +148,9 @@ class Logs(models.Model):
         return self.camera_id
 
 class Sos(models.Model):
-    camera_id = models.CharField(max_length=200)
-    time = models.CharField(max_length=200)
-    action = models.CharField(max_length=200)
+    camera_id = models.CharField(max_length=201)
+    time = models.CharField(max_length=201)
+    action = models.CharField(max_length=201)
     latitude = models.FloatField()
     longitude = models.FloatField()
     sos_type=models.CharField(max_length=200)
