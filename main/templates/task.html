@@ -179,7 +179,7 @@ li a:hover {
         <option>None</option>
         {% for j in workers %}
           {% if flag == 'range_incharge' %}
-            <option value='{{j.area}}'>{{ j.area }}</option>
+            <option value='{{j}}'>{{ j }}</option>
           {% elif flag == 'beat_incharge' %}
             <option value='{{ j.empid }}-{{j.name}}'>{{ j.empid }}-{{j.name}}</option>
           {% endif %}
