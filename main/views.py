@@ -779,14 +779,18 @@ class Report_api(APIView):
 class Local_report_api(APIView):
     def post(self,request):
         r=Local_report()
-        r.empid=request.data['empid']
+        r.lrid='id-'+str(Local_report.objects.count())
         res = bytes(request.data['image'], 'utf-8')
         r.image=res
         r.rtype=request.data['type']
         r.description=request.data['description']
         r.latitude=request.data['latitude']
         r.longitude=request.data['longitude']
+        r.report_name=request.data['report_name']
+        r.address=request.data['address']
+        r.user_name=request.data['user_name']
         r.save()
+        return Response({"status":True})
 
 class Taskreport(APIView):
     def post(self,request):
