@@ -64,7 +64,10 @@ class Beat_employee(models.Model):
 class Local_report(models.Model):
     lrid = models.CharField(max_length=200)
     rtype = models.CharField(max_length=1001)
+    report_name = models.CharField(max_length=1001)
     description = models.CharField(max_length=1000)
+    address = models.CharField(max_length=1000)
+    user_name = models.CharField(max_length=1000)
     phone_no = models.CharField(max_length=10)
     image = models.BinaryField()
     latitude = models.FloatField()
