@@ -879,11 +879,17 @@ class Alertapi(APIView):
                 x.action=request.data['type']
                 x.time=str(request.data['timestamp'])
                 x.save()
+                s={}
+                s["latitude"]=x.latitude
+                s["longitude"]=x.longitude
+                s["camera_id"]=x.camera_id
+                s["action"]=x.action
+                s["time"]=x.time
                 async_to_sync(get_channel_layer().group_send)(
                     'alert',
                     {
                         'type': 'alert_message',
-                        'message': json.dumps(x)
+                        'message': json.dumps(s)
                     }
                 )
                 # c = db.collection(u'camera').document('hunter')
@@ -909,11 +915,21 @@ class Alertapi(APIView):
                 x.phone_number=request.data['phone_number']
                 x.address=request.data['address']
                 x.save()
+                s={}
+                s["latitude"]=x.latitude
+                s["longitude"]=x.longitude
+                s["camera_id"]=x.camera_id
+                s["action"]=x.action
+                s["time"]=x.time
+                s["name"]=x.name
+                s["phone_no"]=x.phone_number
+                s["address"]=x.address
+                s["sos_type"]=x.sos_type
                 async_to_sync(get_channel_layer().group_send)(
                     'alert',
                     {
                         'type': 'alert_message',
-                        'message': json.dumps(x)
+                        'message': json.dumps(s)
                     }
                 )
 
