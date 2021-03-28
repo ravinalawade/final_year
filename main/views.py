@@ -825,6 +825,10 @@ class Taskreport(APIView):
     def post(self,request):
         t=Task_Description()
         t.task_id=request.data["taskID"]
+        Tasks.objects.filter(task_id=request.data["taskID"]).update(status="complete")
+        Beat_tasks.objects.filter(task_id=request.data["taskID"]).update(status="complete")
+        Range_tasks.objects.filter(task_id=request.data["taskID"]).update(status="complete")
+        Division_tasks.objects.filter(task_id=request.data["taskID"]).update(status="complete")
         t.empid=request.data["empid"]
         t.description=request.data["report"]
         t.latitude=request.data["latitude"]
