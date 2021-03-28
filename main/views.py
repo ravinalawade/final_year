@@ -254,8 +254,8 @@ def assigntask(request):
             se={}
             se["type"]="task"
             se["id"]=ta.task_id
-            se["name"]=ta.task_name
-            se["type"]=ta.task_type
+            se["task_name"]=ta.task_name
+            se["task_type"]=ta.task_type
             se["description"]=ta.task_info
             se["assigning_offcier"]=ta.task_to
             se["deadline"]=ta.deadline
