@@ -252,7 +252,7 @@ def assigntask(request):
             print(ta)
             
             se={}
-            se["response_type"]="task"
+            se["type"]="task"
             se["id"]=ta.task_id
             se["name"]=ta.task_name
             se["type"]=ta.task_type
