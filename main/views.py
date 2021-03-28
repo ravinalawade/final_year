@@ -844,7 +844,7 @@ class Task_api(APIView):
             se["task_name"]=ta.task_type
             se["task_type"]=ta.task_type
             se["description"]=ta.task_info
-            se["assigning_offcier"]=ta.task_to
+            se["assigning_offcier"]=ta.task_from
             se["deadline"]=ta.deadline
             arr.append(se)
         return Response({"tasks":arr})
