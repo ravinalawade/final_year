@@ -257,7 +257,7 @@ def assigntask(request):
             se["task_name"]=ta.task_name
             se["task_type"]=ta.task_type
             se["description"]=ta.task_info
-            se["assigning_offcier"]=ta.task_to
+            se["assigning_officer"]=ta.task_to
             se["deadline"]=ta.deadline
             async_to_sync(get_channel_layer().group_send)(
                 request.POST['task_to'],
