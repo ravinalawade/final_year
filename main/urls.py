@@ -44,7 +44,8 @@ urlpatterns = [
     path('register/', views.Register_api.as_view(), name='register_api'),
     path('check/', views.Check.as_view(), name='check_api'),
     path('taskreport/', views.Taskreport.as_view(), name='taskreport'),
-    path('backtask',views.backtask.as_view(),name='backtask'),
+    path('backtask/',views.backtask.as_view(),name='backtask'),
+    path('task_api/',views.Task_api.as_view(),name='task_api'),
 
     #############TESTING########################
     path('session_api/', views.Session_test.as_view(), name='session_api'),

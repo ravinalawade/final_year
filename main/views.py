@@ -804,7 +804,23 @@ class Taskreport(APIView):
         t.save()
         return Response({"status":True})
 
-        
+class Task_api(APIView):
+    def post(self,request):
+        empid=request.data["empid"]+"-"+request.data["empid"]
+        d=Tasks.objects.filter(task_to=empid and status="incomplete")
+        arr=[]
+        for ta in d:
+            se={}
+            se["response_type"]="task"
+            se["id"]=ta.task_id
+            se["name"]=ta.task_name
+            se["type"]=ta.task_type
+            se["description"]=ta.task_info
+            se["assigning_offcier"]=ta.task_to
+            se["deadline"]=ta.deadline
+            arr.append(se)
+        return Response(arr)
+
 
 class Check(APIView):
     def post(self,request):
