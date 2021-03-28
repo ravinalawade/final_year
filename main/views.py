@@ -353,6 +353,27 @@ def alertmap(request):
     return render(request,"alertmap.html",{})
 
 def stats(request):
+    # a={}
+    # a["hunter"]=Logs.objects.filter(action="hunter").count()
+    # a["sos"]=Logs.objects.filter(action="sos").count()
+    # a["camera"]=Logs.objects.filter(action="camera").count()
+
+    # h={}
+    # hun=Logs.objects.filter(action="hunter")
+    # c={}
+    # for i in hun:
+    #     cam=Camera.objects.get(camera_id=i.camera_id)
+    #     if cam.beat_id in c.keys():
+    #         c[cam.beat_id]+=1
+    #     else:
+    #         c[cam.beat_id]=1
+    # so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
+    # for i in so.keys():
+    #     print(i,so[i])
+    # h=so
+
+
+
     return render(request,"dashboard.html",{})
 
 def track(request):
@@ -665,6 +686,13 @@ def back():
         print(time)
         for i in xyz:
             c=Camera.objects.get(camera_id=i)
+            l=Logs()
+            l.camera_id=c.camera_id
+            l.action="camera"
+            l.latitude=c.latitude
+            l.longitude=c.longitude
+            l.time=str(datetime.datetime.now())
+            l.save()
             d={}
             d["camera_id"]=c.camera_id
             d["latitude"]=c.latitude

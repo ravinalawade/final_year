@@ -90,6 +90,9 @@ class Camera(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     status = models.CharField(max_length=200)
+    beat_id=models.CharField(max_length=200)
+    range_id=models.CharField(max_length=200)
+    division_id=models.CharField(max_length=200)
     def __str__(self):
         return self.camera_id
 
