@@ -834,7 +834,7 @@ class Taskreport(APIView):
 
 class Task_api(APIView):
     def post(self,request):
-        empid=request.data["empid"]+"-"+request.data["empid"]
+        empid=request.data["empid"]+"-"+request.data["name"]
         d=Tasks.objects.filter(task_to=empid , status="incomplete")
         arr=[]
         for ta in d:
