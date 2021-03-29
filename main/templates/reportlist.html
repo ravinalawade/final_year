@@ -46,10 +46,117 @@
          display: inline-block;
          margin: 15px;
          }
+
+         ul {
+  list-style-type: none;
+  margin: 0 100px;
+  padding:7px 20px 0px 0px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+li {
+  float: right;
+}
+
+li a {
+  display: block;
+  color:#3CB371 ;
+  text-align: center;
+  padding: 14px 25px;
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+
+li a:hover {
+  color: #006400;
+  border-bottom: 1px solid #006400;
+}
+
+         .popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup #content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+  #popup1 {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+
       </style>
    </head>
 
    <body>
+      <script>
+         console.log('Sending connection')
+             const chatSocket = new WebSocket(
+             'ws://'
+             + window.location.host
+             + '/web_socket'
+             );
+     
+         chatSocket.onmessage = function (event) {
+             console.log(event);
+             var pop=document.getElementById("popup1")
+             var message=document.getElementById("content")
+             message.innerHTML=event.data
+             pop.style.visibility="visible"
+             pop.style.opacity="1"
+             }
+     
+         function ok(){
+             console.log("ok");
+             var pop=document.getElementById("popup1")
+             pop.style.visibility="hidden"
+             pop.style.opacity="0"
+         }
+       </script>
+       <div id="popup1" class="overlay">
+         <div class="popup">
+           <h2>Here i am</h2>
+           <!-- <a class="close" href="#">&times;</a> -->
+           
+           <div id="content">
+             Thank to pop me out of that button, but now i'm done so you can close this window.
+           </div>
+           <button id="close" onclick="ok()">OK</button>
+         </div>
+       </div>
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog">
@@ -68,41 +175,16 @@
          </div>
       </div>
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-         <a class="navbar-brand" href="#">Navbar</a>
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-         </button>
-
-         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-               <li class="nav-item active">
-                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-               </li>
-               <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <div class="dropdown-divider"></div>
-                     <a class="dropdown-item" href="#">Something else here</a>
-                  </div>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-               </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-               <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-         </div>
-      </nav>
+      <ul>
+         <!-- <li><a href="#about">Tab</a></li>
+         <li><a href="#contact">Tab</a></li>
+         <li><a href="#news">Tab</a></li> -->
+         <li><a href='{% url '' %}'>Home</a></li>
+         <li><a href='{% url 'task' %}'>Task</a></li>
+         <li><a href='{% url 'reportlist' %}'>Reports</a></li>
+         <li><a href='{% url 'stats' %}'>Statistics</a></li>
+         <li><a href='{% url 'logout_server' %}'>Logout</a></li>
+       </ul>
 
       <div class="container tablefilter"></div>
 

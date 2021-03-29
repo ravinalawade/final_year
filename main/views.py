@@ -355,7 +355,7 @@ def alertmap(request):
 def stats(request):
     a={}
     a["hunter"]=Logs.objects.filter(action="hunter").count()
-    a["sos"]=Logs.objects.filter(action="sos").count()
+    a["sos"]=Sos.objects.filter(action="sos").count()
     a["camera"]=Logs.objects.filter(action="camera").count()
 
     h={}
@@ -367,12 +367,12 @@ def stats(request):
             c[cam.beat_id]+=1
         else:
             c[cam.beat_id]=1
-    so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
     for i in so.keys():
         print(i,so[i])
     h=so
 
-    animal={}
+    elephant={}
     ani=Logs.objects.filter(action="elephant")
     c={}
     for i in ani:
@@ -381,16 +381,72 @@ def stats(request):
             c[cam.beat_id]+=1
         else:
             c[cam.beat_id]=1
-    so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
     for i in so.keys():
         print(i,so[i])
-    animal=so
+    elephant=so
+
+    macaque={}
+    ani=Logs.objects.filter(action="macaque")
+    c={}
+    for i in ani:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    macaque=so
+    lion={}
+    ani=Logs.objects.filter(action="lion")
+    c={}
+    for i in ani:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    lion=so
+    tiger={}
+    ani=Logs.objects.filter(action="tiger")
+    c={}
+    for i in ani:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    tiger=so
+    civet={}
+    ani=Logs.objects.filter(action="civet")
+    c={}
+    for i in ani:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    civet=so
+
+    animal={"elephant":elephant,"lion":lion,"tiger":tiger,"macaque":macaque,"civet":civet}
 
     report={}
     report["animal incident"]=Report.objects.filter(rtype="animal incident").count()
     report["tree fall"]=Report.objects.filter(rtype="tree fall").count()
     report["settlement incident"]=Report.objects.filter(rtype="settlement incident").count()
     report["lost object"]=Report.objects.filter(rtype="lost object").count()
+    report["alert report"]=Report.objects.filter(rtype="alert report").count()
     report["other"]=Report.objects.filter(rtype="other").count()
 
     return render(request,"dashboard.html",{"alert":a,"hunter":h,"animal":animal,"report":report})
@@ -972,8 +1028,8 @@ class Alertapi(APIView):
                 # })
             elif request.data['type']=="sos":
                 x=Sos()
-                x.latitude=21.23
-                x.longitude=73.75
+                x.latitude=request.data['latitude']
+                x.longitude=request.data['longitude']
                 x.camera_id=request.data['camera_id']
                 x.action=request.data['type']
                 x.time=str(request.data['timestamp'])
@@ -1004,17 +1060,17 @@ class Alertapi(APIView):
                 x=Logs()
                 x.latitude=float(request.data['latitude'])
                 x.longitude=float(request.data['longitude'])
-                x.camera_id=request.data['value']
+                x.camera_id=request.data['camera_id']
                 x.action=request.data['type']
                 x.time=str(request.data['timestamp'])
                 x.save()
-                async_to_sync(get_channel_layer().group_send)(
-                'alert',
-                    {
-                        'type': 'alert_message',
-                        'message': "Alert message Something is detected"
-                    }
-                )
+                # async_to_sync(get_channel_layer().group_send)(
+                # 'alert',
+                #     {
+                #         'type': 'alert_message',
+                #         'message': "Alert message Something is detected"
+                #     }
+                # )
             
         return Response({"status":True})
 

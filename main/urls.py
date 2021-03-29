@@ -4,7 +4,7 @@ from main import views
 urlpatterns = [
     ###############SERVER######################
     path('',views.login_server,name='login_server'),
-    path('addforest_employee/',views.addforest_employee,name='addforest_employee'),
+    path('addforest_employee',views.addforest_employee,name='addforest_employee'),
     path('logout_server',views.logout_server,name='logout_server'),
 
     ####COPY####

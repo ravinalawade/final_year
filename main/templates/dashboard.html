@@ -54,36 +54,121 @@ li a:hover {
   background-color:rgba(29, 230, 161, 0.6);
   color: black;
 }
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup #content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+  #popup1 {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+
 </style>
 </head>
 <body>
+    <script>
+        console.log('Sending connection')
+            const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/web_socket'
+            );
+    
+        chatSocket.onmessage = function (event) {
+            console.log(event);
+            var pop=document.getElementById("popup1")
+            var message=document.getElementById("content")
+            message.innerHTML=event.data
+            pop.style.visibility="visible"
+            pop.style.opacity="1"
+            }
+    
+        function ok(){
+            console.log("ok");
+            var pop=document.getElementById("popup1")
+            pop.style.visibility="hidden"
+            pop.style.opacity="0"
+        }
+      </script>
+      <div id="popup1" class="overlay">
+        <div class="popup">
+          <h2>Here i am</h2>
+          <!-- <a class="close" href="#">&times;</a> -->
+          
+          <div id="content">
+            Thank to pop me out of that button, but now i'm done so you can close this window.
+          </div>
+          <button id="close" onclick="ok()">OK</button>
+        </div>
+      </div>
   <ul>
     <!-- <li><a href="#about">Tab</a></li>
     <li><a href="#contact">Tab</a></li>
     <li><a href="#news">Tab</a></li> -->
-    <li><a href='{% url 'logout_server' %}'>Logout</a></li>
+    <li><a href='{% url '' %}'>Home</a></li>
     <li><a href='{% url 'task' %}'>Task</a></li>
     <li><a href='{% url 'reportlist' %}'>Reports</a></li>
     <li><a href='{% url 'localreportlist' %}'>Local Reports</a></li>
+    <li><a href='{% url 'logout_server' %}'>Logout</a></li>
     
   </ul>
   <h1 style="text-align: center;font-family: 'Poppins', sans-serif; font-size: 50px;">Statistics</h1>
 <div style="max-width: 1300px; margin: auto; padding: 10px;">
 <div style="width: 45%; height: 300px;display: inline-block; margin-top: 10px;"><canvas id="chartContainer1"></canvas></div> 
 <div style="width: 45%; height: 300px;display: inline-block; margin-left: 70px; margin-top: 10px;"><canvas id="chartContainer2"></canvas></div>
-<div style="width: 45%; height: 300px;display: inline-block; margin-top: 40px;"><canvas id="chartContainer3"></canvas></div>
+<div style="width: 45%; height: 300px;display: inline-block; margin-top: 40px;">
+  <canvas id="chartContainer3"></canvas>
+</div>
 <div style="width: 45%; height: 300px;display: inline-block; margin-left: 70px;margin-top: 40px;"><canvas id="chartContainer4"></canvas></div>
 
 </div>
 <script>
 var ctx = document.getElementById('chartContainer1');
+var report={{report|safe}}
+console.log(report)
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Elephant','Deer','Macaque','Peacock','Civet','Treeshrew'],
+        labels: ['Animal incident','Tree fall','Settlement incident','Lost object','Alert Report','Other'],
         datasets: [{
-            label: 'Types of Animal',
-            data: [70, 30, 40, 50, 80,45],
+            label: 'Types of Report',
+            data: [report["animal incident"],report['tree fall'],report['settlement incident'],report['lost object'],report['alert report'],report['other']],
             backgroundColor: [
                 'rgba(56, 211, 159,0.5)',
                 'rgba(56, 211, 159,0.5)',
@@ -109,7 +194,7 @@ var myChart = new Chart(ctx, {
           fontSize:30,
           fontFamily:"'Poppins', sans-serif",
           fontColor:"#38d39f",
-          text: 'Spoted Animal Occurences'
+          text: 'Reports'
         },
         scales: {
             yAxes: [{
@@ -122,13 +207,21 @@ var myChart = new Chart(ctx, {
 });
 
 var ctx = document.getElementById('chartContainer2');
+var hunter={{hunter|safe}}
+console.log(hunter)
+var lab=[]
+var val=[]
+for (const [key, value] of Object.entries(hunter)){
+  lab.push(key)
+  val.push(value)
+}
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Trap Lines', 'Dinghy', 'Tent','Storm Chip','Air Gun','Venison'],
+        labels: lab,
         datasets: [{
-            label: 'No. of Offence',
-            data: [40, 70, 20, 50, 80,75],
+            label: 'Hunter offence',
+            data: val,
             backgroundColor: [
                 'rgba(56, 211, 159,0.5)',
                 'rgba(56, 211, 159,0.5)',
@@ -154,7 +247,7 @@ var myChart = new Chart(ctx, {
           fontSize:30,
           fontFamily:"'Poppins', sans-serif",
           fontColor:"#38d39f",
-          text: 'No. of offence by type'
+          text: 'Hunter'
         },
         scales: {
             yAxes: [{
@@ -166,53 +259,70 @@ var myChart = new Chart(ctx, {
     }
 });
 
-var speedCanvas = document.getElementById("chartContainer3");
 
-Chart.defaults.global.defaultFontFamily = "Lato";
-Chart.defaults.global.defaultFontSize = 18;
-
-var speedData = {
-  labels: ['May','June','July','Aug','Sept','Oct'],
-  datasets: [{
-    label: "No of Offence",
-    data: [0, 59, 75, 20, 20, 55, 40],
-    borderColor: 'rgba(56, 211, 159,1)',
-    backgroundColor: 'rgba(56, 211, 159,0.1)',
-  }]
-};
-
-var chartOptions = {
-  title: {
+var ctx = document.getElementById('chartContainer3');
+var animal={{animal|safe}}
+console.log(animal)
+var lab=[]
+var val=[]
+for (const [key, value] of Object.entries(animal["elephant"])){
+  lab.push(key)
+  val.push(value)
+}
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: lab,
+        datasets: [{
+            label: 'Animal',
+            data: val,
+            backgroundColor: [
+                'rgba(56, 211, 159,0.5)',
+                'rgba(56, 211, 159,0.5)',
+                'rgba(56, 211, 159,0.5)',
+                'rgba(56, 211, 159,0.5)',
+                'rgba(56, 211, 159, 0.5)',
+                'rgba(56, 211, 159,0.5)'
+            ],
+            borderColor: [
+                'rgba(56, 211, 159,1)',
+                'rgba(56, 211, 159,1)',
+                'rgba(56, 211, 159,1)',
+                'rgba(56, 211, 159,1)',
+                'rgba(56, 211, 159, 1)',
+                'rgba(56, 211, 159,1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      title: {
           display: true,
           fontSize:30,
           fontFamily:"'Poppins', sans-serif",
           fontColor:"#38d39f",
-          text: 'No. of offences'
+          text: 'Spotted Animals'
         },
-  legend: {
-    display: true,
-    position: 'top',
-    labels: {
-      boxWidth: 80,
-      fontColor: 'black'
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
     }
-  }
-};
-
-var lineChart = new Chart(speedCanvas, {
-  type: 'line',
-  data: speedData,
-  options: chartOptions
 });
 
 var ctx = document.getElementById('chartContainer4');
+var alert={{alert|safe}}
+console.log(alert)
 var myPieChart = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ['Trap Lines', 'Dinghy', 'Tent','Storm Chip','Air Gun'],
+        labels: ['Hunter', 'Camera', 'SOS'],
         datasets: [{
             
-            data: [70, 30, 40, 50, 80,45],
+            data: [alert["hunter"],alert["camera"],alert["sos"]],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.5)',
                 'rgba(54, 162, 235, 0.5)',
@@ -238,7 +348,7 @@ var myPieChart = new Chart(ctx, {
           fontSize:30,
           fontFamily:"'Poppins', sans-serif",
           fontColor:"#38d39f",
-          text: 'Reports'
+          text: 'Alerts'
         },
     }
     
