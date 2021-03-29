@@ -100,6 +100,25 @@ class Animal_socket(WebsocketConsumer):
         lat=Animal.objects.get(animal_id=aid).longitude
         lat.append(longitude)
         Animal.objects.filter(animal_id=aid).update(longitude=lat)
+        data=[]
+        ani=Animal.objects.all()
+        for i in ani:
+            a={}
+            a["animal"]=i.animal_name
+            a["id"]=i.animal_id
+            temp=i.latitude
+            a["latitude"]=temp[-1]
+            temp=i.longitude
+            a["longitude"]=temp[-1]
+            data.append(a)
+        se={"animals":data}
+        async_to_sync(get_channel_layer().group_send)(
+            "animal",
+            {
+                'type': 'animal',
+                'message': json.dumps(se)
+            }
+        )
 
     def coordinates(self,event):
         print("Sending from server",event)
