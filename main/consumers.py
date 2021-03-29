@@ -115,7 +115,7 @@ class Animal_socket(WebsocketConsumer):
         async_to_sync(get_channel_layer().group_send)(
             "animal",
             {
-                'type': 'animal',
+                'type': 'coordinates',
                 'message': json.dumps(se)
             }
         )
