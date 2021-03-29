@@ -78,3 +78,30 @@ class Web_socket(WebsocketConsumer):
     def alert_message(self,event):
         print("Sending from server",event)
         self.send(text_data=event['message'])
+
+class Animal_socket(WebsocketConsumer):
+    def connect(self):
+        print("connecting animal")
+        async_to_sync(get_channel_layer().group_add)(
+            "animal",
+            self.channel_name
+        )
+        self.accept()
+
+    def receive(self,data):
+        print("received data",data)
+        d=json.loads(data)
+        aid=d["id"]
+        latitude=d["latitude"]
+        longitude=d["longitude"]
+        lat=Animal.objects.get(animal_id=aid).latitude
+        lat.append(latitude)
+        Animal.objects.filter(animal_id=aid).update(latitude=lat)
+        lat=Animal.objects.get(animal_id=aid).longitude
+        lat.append(longitude)
+        Animal.objects.filter(animal_id=aid).update(longitude=lat)
+
+    def coordinates(self,event):
+        print("Sending from server",event)
+        self.send(text_data=event['message'])
+
