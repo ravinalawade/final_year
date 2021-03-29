@@ -353,28 +353,47 @@ def alertmap(request):
     return render(request,"alertmap.html",{})
 
 def stats(request):
-    # a={}
-    # a["hunter"]=Logs.objects.filter(action="hunter").count()
-    # a["sos"]=Logs.objects.filter(action="sos").count()
-    # a["camera"]=Logs.objects.filter(action="camera").count()
+    a={}
+    a["hunter"]=Logs.objects.filter(action="hunter").count()
+    a["sos"]=Logs.objects.filter(action="sos").count()
+    a["camera"]=Logs.objects.filter(action="camera").count()
 
-    # h={}
-    # hun=Logs.objects.filter(action="hunter")
-    # c={}
-    # for i in hun:
-    #     cam=Camera.objects.get(camera_id=i.camera_id)
-    #     if cam.beat_id in c.keys():
-    #         c[cam.beat_id]+=1
-    #     else:
-    #         c[cam.beat_id]=1
-    # so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
-    # for i in so.keys():
-    #     print(i,so[i])
-    # h=so
+    h={}
+    hun=Logs.objects.filter(action="hunter")
+    c={}
+    for i in hun:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    h=so
 
+    animal={}
+    ani=Logs.objects.filter(action="elephant")
+    c={}
+    for i in ani:
+        cam=Camera.objects.get(camera_id=i.camera_id)
+        if cam.beat_id in c.keys():
+            c[cam.beat_id]+=1
+        else:
+            c[cam.beat_id]=1
+    so=dict(sorted(x.items(), key=lambda item: item[1] ,reverse=True))
+    for i in so.keys():
+        print(i,so[i])
+    animal=so
 
+    report={}
+    report["animal incident"]=Report.objects.filter(rtype="animal incident").count()
+    report["tree fall"]=Report.objects.filter(rtype="tree fall").count()
+    report["settlement incident"]=Report.objects.filter(rtype="settlement incident").count()
+    report["lost object"]=Report.objects.filter(rtype="lost object").count()
+    report["other"]=Report.objects.filter(rtype="other").count()
 
-    return render(request,"dashboard.html",{})
+    return render(request,"dashboard.html",{"alert":a,"hunter":h,"animal":animal,"report":report})
 
 def track(request):
     for key, value in request.session.items():
@@ -740,9 +759,9 @@ class Login_api(APIView):
             # Return an 'invalid login' error message.
             u=User.objects.get(username=username)
             if check_password('forestweb', u.password):
-                content = {'message': 'Please register','email':True,'password':False,'password_registration':False}
+                content = {'message': 'Please register','email':True,'password':False,'password_registration':False,'user':None}
             else:
-                content = {'message': 'Not register','email':False,'password':False,'password_registration':False}
+                content = {'message': 'Not register','email':False,'password':False,'password_registration':False,'user':None}
             # content = {'message': 'Hello, World!'}
         print(content)
         return Response(content)
@@ -843,7 +862,7 @@ class Task_api(APIView):
         arr=[]
         for ta in d:
             se={}
-            se["response_type"]="task"
+            se["type"]="task"
             se["id"]=ta.task_id
             se["task_name"]=ta.task_type
             se["task_type"]=ta.task_type
@@ -931,8 +950,8 @@ class Alertapi(APIView):
                 s["latitude"]=x.latitude
                 s["longitude"]=x.longitude
                 s["camera_id"]=x.camera_id
-                s["action"]=x.action
-                s["time"]=x.time
+                s["type"]=x.action
+                s["timestamp"]=x.time
                 async_to_sync(get_channel_layer().group_send)(
                     'alert',
                     {
@@ -967,10 +986,10 @@ class Alertapi(APIView):
                 s["latitude"]=x.latitude
                 s["longitude"]=x.longitude
                 s["camera_id"]=x.camera_id
-                s["action"]=x.action
-                s["time"]=x.time
+                s["type"]=x.action
+                s["timestamp"]=x.time
                 s["name"]=x.name
-                s["phone_no"]=x.phone_number
+                s["phone_number"]=x.phone_number
                 s["address"]=x.address
                 s["sos_type"]=x.sos_type
                 async_to_sync(get_channel_layer().group_send)(
