@@ -88,9 +88,9 @@ class Animal_socket(WebsocketConsumer):
         )
         self.accept()
 
-    def receive(self,data):
-        print("received data",data)
-        d=json.loads(data)
+    def receive(self,text_data):
+        print("received data",text_data)
+        d=json.loads(text_data)
         aid=d["id"]
         latitude=d["latitude"]
         longitude=d["longitude"]
