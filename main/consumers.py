@@ -145,3 +145,30 @@ class Animal_socket(WebsocketConsumer):
         print("Sending from server",event)
         self.send(text_data=event['message'])
 
+class Animallist_socket(WebsocketConsumer):
+    def connect(self):
+        print("connecting animal list")
+        async_to_sync(get_channel_layer().group_add)(
+            "list",
+            self.channel_name
+        )
+        self.accept()
+
+    def receive(self,text_data):
+        print("received data",text_data)
+        a=json.loads(text_data)
+        se={"animals":[{"animal":"tiger","id":"id_3","latitude":20,"longitude":73},
+        {"animal":"tiger","id":"id_4","latitude":21,"longitude":74},
+        {"animal":"tiger","id":"id_1","latitude":22,"longitude":75},
+        {"animal":"tiger","id":"id_2","latitude":23,"longitude":76},]}
+        async_to_sync(get_channel_layer().group_send)(
+            "list",
+            {
+                'type': 'coordinates',
+                'message': json.dumps(se)
+            }
+        )
+
+    def coordinates(self,event):
+        print("Sending from server",event)
+        self.send(text_data=event['message'])
