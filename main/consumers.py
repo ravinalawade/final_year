@@ -12,7 +12,25 @@ class Web_socket(WebsocketConsumer):
         # Join room group
         print("connecting")
         # emp=request.session['empid']
-        
+        data=[]
+        ani=Animal.objects.all()
+        for i in ani:
+            a={}
+            a["animal"]=i.animal_name
+            a["id"]=i.animal_id
+            temp=i.latitude
+            a["latitude"]=temp[-1]
+            temp=i.longitude
+            a["longitude"]=temp[-1]
+            data.append(a)
+        se={"animals":data}
+        async_to_sync(get_channel_layer().group_send)(
+            "animal",
+            {
+                'type': 'coordinates',
+                'message': json.dumps(se)
+            }
+        )
         async_to_sync(get_channel_layer().group_add)(
             "alert",
             self.channel_name
@@ -74,6 +92,9 @@ class Web_socket(WebsocketConsumer):
         # )
 #         ##Connected to alert room
 #         self.accept()
+    def coordinates(self,event):
+        print("Sending from server",event)
+        self.send(text_data=event['message'])
 
     def alert_message(self,event):
         print("Sending from server",event)
@@ -100,18 +121,12 @@ class Animal_socket(WebsocketConsumer):
         lat=Animal.objects.get(animal_id=aid).longitude
         lat.append(longitude)
         Animal.objects.filter(animal_id=aid).update(longitude=lat)
-        data=[]
-        ani=Animal.objects.all()
-        for i in ani:
-            a={}
-            a["animal"]=i.animal_name
-            a["id"]=i.animal_id
-            temp=i.latitude
-            a["latitude"]=temp[-1]
-            temp=i.longitude
-            a["longitude"]=temp[-1]
-            data.append(a)
-        se={"animals":data}
+        ani=Animal.objects.get(animal_id=aid)
+        se={}
+        se["animal"]=ani.animal_name
+        se["id"]=aid
+        se["latitude"]=latitude
+        se["longitude"]=longitude
         async_to_sync(get_channel_layer().group_send)(
             "animal",
             {

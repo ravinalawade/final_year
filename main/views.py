@@ -488,16 +488,24 @@ def track(request):
     return render(request,"track.html",{'data':data,'arr':arr})
 
 def allotrange(request):
-    div_ran={}
+    div_ran=[]
+    ar=[]
     d=Division_range.objects.all()
     for i in d:
-        div_ran[i.division_id]=i.range_id
-    ran_beat={}
-    r=Range_beat.objects.all()
-    for i in r:
-        ran_beat[i.range_id]=i.beat_id
-    print(div_ran,ran_beat)
-    return render(request,'allotrange.html',{'div_ran':div_ran,'ran_beat':ran_beat})
+        ar.append(i.range_id)
+        div_ran.append(i.division_id+"#"+i.range_id)
+    emp=Forest_employee.objects.all()
+    div=[]
+    ran=[]
+    for i in emp:
+        x=i.area.split("-")
+        if x[0]=="d":
+            div.append(i.area)
+        elif x[0]=="r":
+            ran.append(i.area)
+    ran=list(set(ran)-set(ar))
+    print(div_ran)
+    return render(request,'allotrange.html',{'div_ran':div_ran,'division':div,'range':ran})
 
 def allotbeat(request):
     ran_beat={}
