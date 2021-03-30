@@ -163,8 +163,8 @@ class Animallist_socket(WebsocketConsumer):
             temp={}
             temp["animal"]=i.animal_name
             temp["id"]=i.animal_id
-            temp["latitude"]=i.latitude
-            temp["longitude"]=i.longitude
+            temp["latitude"]=i.latitude[-1]
+            temp["longitude"]=i.longitude[-1]
             arr.append(temp)
         se={"animals":arr}
         async_to_sync(get_channel_layer().group_send)(
