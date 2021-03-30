@@ -121,25 +121,25 @@ class Animal_socket(WebsocketConsumer):
         lat=Animal.objects.get(animal_id=aid).longitude
         lat.append(longitude)
         Animal.objects.filter(animal_id=aid).update(longitude=lat)
-        data=[]
-        ani=Animal.objects.all()
-        for i in ani:
-            a={}
-            a["animal"]=i.animal_name
-            a["id"]=i.animal_id
-            temp=i.latitude
-            a["latitude"]=temp[-1]
-            temp=i.longitude
-            a["longitude"]=temp[-1]
-            data.append(a)
-        se={"animals":data}
-        async_to_sync(get_channel_layer().group_send)(
-            "animal",
-            {
-                'type': 'coordinates',
-                'message': json.dumps(se)
-            }
-        )
+        # data=[]
+        # ani=Animal.objects.all()
+        # for i in ani:
+        #     a={}
+        #     a["animal"]=i.animal_name
+        #     a["id"]=i.animal_id
+        #     temp=i.latitude
+        #     a["latitude"]=temp[-1]
+        #     temp=i.longitude
+        #     a["longitude"]=temp[-1]
+        #     data.append(a)
+        # se={"animals":data}
+        # async_to_sync(get_channel_layer().group_send)(
+        #     "animal",
+        #     {
+        #         'type': 'coordinates',
+        #         'message': json.dumps(se)
+        #     }
+        # )
 
     def coordinates(self,event):
         print("Sending from server",event)
@@ -157,19 +157,20 @@ class Animallist_socket(WebsocketConsumer):
     def receive(self,text_data):
         print("received data",text_data)
         a=json.loads(text_data)
-        if "animal" in a.keys():
-            se={"animals":[{"animal":"tiger","id":"id_3","latitude":20,"longitude":73},
-            {"animal":"tiger","id":"id_4","latitude":21,"longitude":74},
-            {"animal":"tiger","id":"id_1","latitude":22,"longitude":75},
-            {"animal":"tiger","id":"id_2","latitude":23,"longitude":76},]}
-            se=json.dumps(se)
-        else:
-            se=text_data
+        data=Animal.objects.filter(animal_name=a["animal"])
+        arr=[]
+        for i in data:
+            temp={}
+            temp["animal"]=i.animal_name
+            temp["id"]=i.animal_id
+            temp["latitude"]=i.latitude
+            temp["longitude"]=i.longitude
+        se={"animals":arr}
         async_to_sync(get_channel_layer().group_send)(
             "list",
             {
                 'type': 'coordinates',
-                'message': se
+                'message': json.dumps(se)
             }
         )
 
