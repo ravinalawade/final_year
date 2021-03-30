@@ -118,9 +118,9 @@ class Animal_socket(WebsocketConsumer):
         lat=Animal.objects.get(animal_id=aid).latitude
         lat.append(latitude)
         Animal.objects.filter(animal_id=aid).update(latitude=lat)
-        lat=Animal.objects.get(animal_id=aid).longitude
-        lat.append(longitude)
-        Animal.objects.filter(animal_id=aid).update(longitude=lat)
+        lon=Animal.objects.get(animal_id=aid).longitude
+        lon.append(longitude)
+        Animal.objects.filter(animal_id=aid).update(longitude=lon)
         # data=[]
         # ani=Animal.objects.all()
         # for i in ani:
