@@ -157,7 +157,14 @@ class Animallist_socket(WebsocketConsumer):
     def receive(self,text_data):
         print("received data",text_data)
         a=json.loads(text_data)
-        se=text_data
+        if "animal" in a.keys():
+            se={"animals":[{"animal":"tiger","id":"id_3","latitude":20,"longitude":73},
+            {"animal":"tiger","id":"id_4","latitude":21,"longitude":74},
+            {"animal":"tiger","id":"id_1","latitude":22,"longitude":75},
+            {"animal":"tiger","id":"id_2","latitude":23,"longitude":76},]}
+            se=json.dumps(se)
+        else:
+            se=text_data
         async_to_sync(get_channel_layer().group_send)(
             "list",
             {
