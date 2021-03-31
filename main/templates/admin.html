@@ -286,9 +286,12 @@ p{
         var st=""
         for (var i in dict){
             for(var j in dict[i])
+                {
                 st+=dict[i][j]
                 st+="-"
+            }
         }
+        console.log(st)
         $.ajax({
         type: "POST",
         url: "{% url 'location' %}",  

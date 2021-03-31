@@ -317,19 +317,26 @@ def addcamera(request):
 
 def location(request):
     print(request.POST['animals'])
-    animals=request.POST['animals'].split(",")
+    animals=request.POST['animals'].split("-")
+    print("animals id",animals)
     sdict={}
     slat={}
     slon={}
-    for atype in animals:
-        sdict[atype]=[]
-        slat[atype]=[]
-        slon[atype]=[]
-        a=Animal.objects.filter(animal_info=atype)
-        for i in a:
-            sdict[atype].append(i.animal_id)
-            slat[atype].append(i.latitude[-1])
-            slon[atype].append(i.longitude[-1])
+    for a in range(len(animals)-1):
+        x=Animal.objects.get(animal_id=animals[a])
+        if x.animal_name not in sdict.keys():
+            sdict[x.animal_name]=[x.animal_id]
+        else:
+            sdict[x.animal_name].append(x.animal_id)
+        if x.animal_name not in slat.keys():
+            slat[x.animal_name]=[x.latitude[-1]]
+        else:
+            slat[x.animal_name].append(x.latitude[-1])
+        if x.animal_name not in slon.keys():
+            slon[x.animal_name]=[x.longitude[-1]]
+        else:
+            slon[x.animal_name].append(x.longitude[-1])
+
     print(sdict,slat,slon)
     return JsonResponse({"sdict":sdict,"slat":slat,"slon":slon})
 
