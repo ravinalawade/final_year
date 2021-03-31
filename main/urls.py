@@ -22,7 +22,7 @@ urlpatterns = [
     # path('addforest_employee', views.addforest_employee, name='addforest_employee'),
     # path('researcherlist', views.researcherlist, name='researcherlist'),
     path('location',views.location,name='location'),
-    # path('geojson',views.geojson,name='geojson'),
+    path('geojson',views.geojson,name='geojson'),
     # path('editresearcher/<id>/',views.editresearcher,name='editresearcher'),
     # path('report',views.report,name='report'),
     path('stats',views.stats,name='stats'),
@@ -46,6 +46,7 @@ urlpatterns = [
     path('taskreport/', views.Taskreport.as_view(), name='taskreport'),
     path('backtask/',views.backtask.as_view(),name='backtask'),
     path('task_api/',views.Task_api.as_view(),name='task_api'),
+    path('animal_api/',views.Animal_api.as_view(),name='animal_api'),
 
     #############TESTING########################
     path('session_api/', views.Session_test.as_view(), name='session_api'),

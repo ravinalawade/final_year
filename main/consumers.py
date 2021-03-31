@@ -12,25 +12,25 @@ class Web_socket(WebsocketConsumer):
         # Join room group
         print("connecting")
         # emp=request.session['empid']
-        data=[]
-        ani=Animal.objects.all()
-        for i in ani:
-            a={}
-            a["animal"]=i.animal_name
-            a["id"]=i.animal_id
-            temp=i.latitude
-            a["latitude"]=temp[-1]
-            temp=i.longitude
-            a["longitude"]=temp[-1]
-            data.append(a)
-        se={"animals":data}
-        async_to_sync(get_channel_layer().group_send)(
-            "animal",
-            {
-                'type': 'coordinates',
-                'message': json.dumps(se)
-            }
-        )
+        # data=[]
+        # ani=Animal.objects.all()
+        # for i in ani:
+        #     a={}
+        #     a["animal"]=i.animal_name
+        #     a["id"]=i.animal_id
+        #     temp=i.latitude
+        #     a["latitude"]=temp[-1]
+        #     temp=i.longitude
+        #     a["longitude"]=temp[-1]
+        #     data.append(a)
+        # se={"animals":data}
+        # async_to_sync(get_channel_layer().group_send)(
+        #     "animal",
+        #     {
+        #         'type': 'coordinates',
+        #         'message': json.dumps(se)
+        #     }
+        # )
         async_to_sync(get_channel_layer().group_add)(
             "alert",
             self.channel_name

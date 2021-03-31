@@ -693,6 +693,13 @@ def localreportlist(request):
         main_dict.append(rep_dic)
     return render(request,"localreportlist.html",{"main_dict":main_dict})
 
+
+def geojson(request):
+    data = open('main/static/animal.geojson').read() #opens the json file and saves the raw contents
+    data = json.loads(data)
+    # data['features']=sorted(data['features'], key=lambda k: k['properties'].get("AREA_SHORT_CODE",0))
+    return JsonResponse(data, safe=False)
+
 def getexcelanimal(request):
     workbook = xlsxwriter.Workbook('main/static/data.xlsx')
     worksheet = workbook.add_worksheet()  
@@ -959,6 +966,23 @@ class Session_test(APIView):
         permission_classes = (IsAuthenticated,)
         print(request.session['data'])
         return Response("Hello World")
+
+class Animal_api(APIView):
+    def post(self,request):
+        data=[]
+        ani=Animal.objects.all()
+        for i in ani:
+            a={}
+            a["animal"]=i.animal_name
+            a["id"]=i.animal_id
+            temp=i.latitude
+            a["latitude"]=temp[-1]
+            temp=i.longitude
+            a["longitude"]=temp[-1]
+            data.append(a)
+        se={"animals":data}
+        print(se)
+        return Response(se)
 
 class Alertapi(APIView):
     def post(self,request):
