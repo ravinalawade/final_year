@@ -283,12 +283,18 @@ p{
 
     function getlocation(){
         console.log(Object.keys(dict))
+        var st=""
+        for (var i in dict){
+            for(var j in dict[i])
+                st+=dict[i][j]
+                st+="-"
+        }
         $.ajax({
         type: "POST",
         url: "{% url 'location' %}",  
         dataType:'json', 
         data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              animals:(Object.keys(dict)).toString()},   /* Passing the text data */
+              animals:st},   /* Passing the text data */
         success:  function(response){
                console.log(response);
                dict=response['sdict']
