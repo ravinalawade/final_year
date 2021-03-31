@@ -288,7 +288,7 @@ p{
         url: "{% url 'location' %}",  
         dataType:'json', 
         data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              animals:(["lion","tiger"]).toString()},   /* Passing the text data */
+              animals:(Object.keys(dict)).toString()},   /* Passing the text data */
         success:  function(response){
                console.log(response);
                dict=response['sdict']
