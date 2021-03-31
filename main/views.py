@@ -971,15 +971,18 @@ class Animal_api(APIView):
     def post(self,request):
         data=[]
         ani=Animal.objects.all()
+        al=set()
         for i in ani:
-            a={}
-            a["animal"]=i.animal_name
-            a["id"]=i.animal_id
-            temp=i.latitude
-            a["latitude"]=temp[-1]
-            temp=i.longitude
-            a["longitude"]=temp[-1]
-            data.append(a)
+            al.add(i.animal_name)
+        al=list(al)
+        for i in al:
+            temp={}
+            temp["animal"]=i
+            temp["id"]=[]
+            id=Animal.objects.filter(animal_name=i)
+            for j in id:
+                temp["id"].append(j.animal_id)
+            data.append(temp)
         se={"animals":data}
         print(se)
         return Response(se)
