@@ -283,12 +283,21 @@ p{
 
     function getlocation(){
         console.log(Object.keys(dict))
+        var st=""
+        for (var i in dict){
+            for(var j in dict[i])
+                {
+                st+=dict[i][j]
+                st+="-"
+            }
+        }
+        console.log(st)
         $.ajax({
         type: "POST",
         url: "{% url 'location' %}",  
         dataType:'json', 
         data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              animals:(["lion","tiger"]).toString()},   /* Passing the text data */
+              animals:st},   /* Passing the text data */
         success:  function(response){
                console.log(response);
                dict=response['sdict']
@@ -345,7 +354,7 @@ p{
                 }
                 c+=1
             }               
-        },10000);
+        },5000);
     }
 
     function selanimal(flag){
