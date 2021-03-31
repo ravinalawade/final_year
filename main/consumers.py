@@ -157,21 +157,15 @@ class Animallist_socket(WebsocketConsumer):
     def receive(self,text_data):
         print("received data",text_data)
         a=json.loads(text_data)
-        data=Animal.objects.filter(animal_name=a["animal"])
-        arr=[]
-        for i in data:
-            temp={}
-            temp["animal"]=i.animal_name
-            temp["id"]=i.animal_id
-            temp["latitude"]=i.latitude[-1]
-            temp["longitude"]=i.longitude[-1]
-            arr.append(temp)
-        se={"animals":arr}
+        for i in a["animals"]:
+            id=i["id"]
+            i["latitude"]=Animal.objects.get(animal_id=id).latitude
+            i["longitude"]=Animal.objects.get(animal_id=id).longitude
         async_to_sync(get_channel_layer().group_send)(
             "list",
             {
                 'type': 'coordinates',
-                'message': json.dumps(se)
+                'message': json.dumps(a)
             }
         )
 
