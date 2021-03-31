@@ -152,13 +152,34 @@ li a:hover {
 <div style="max-width: 1300px; margin: auto; padding: 10px;">
 <div style="width: 45%; height: 300px;display: inline-block; margin-top: 10px;"><canvas id="chartContainer1"></canvas></div> 
 <div style="width: 45%; height: 300px;display: inline-block; margin-left: 70px; margin-top: 10px;"><canvas id="chartContainer2"></canvas></div>
-<div style="width: 45%; height: 300px;display: inline-block; margin-top: 40px;">
-  <canvas id="chartContainer3"></canvas>
-</div>
+<div style="width: 45%; height: 400px;display: inline-block; margin-top: 40px;">
+    <canvas id="chartContainer3"></canvas>
+    <div style="text-align: center;">
+      <select name="animal" id="animal" onchange="graph(this.value)">
+        <option value="None">Select Animal</option>
+        {% for i in animal %}
+        <option value="{{i}}">{{i}}</option>
+        {%endfor%}
+      </select>
+    </div>
+  </div>
 <div style="width: 45%; height: 300px;display: inline-block; margin-left: 70px;margin-top: 40px;"><canvas id="chartContainer4"></canvas></div>
-
 </div>
 <script>
+  function graph(value){
+    console.log(value)
+    var lab=[]
+    var val=[]
+    var a=String(value)
+    for (const [key, value] of Object.entries(animal[a])){
+      lab.push(key)
+      val.push(value)
+    }
+    myChart_animal.data.labels=lab
+    myChart_animal.data.datasets[0].data=val
+    myChart_animal.update()
+    console.log(myChart_animal.data.labels,myChart_animal.data.datasets[0].data)
+  }
 var ctx = document.getElementById('chartContainer1');
 var report={{report|safe}}
 console.log(report)
@@ -269,7 +290,7 @@ for (const [key, value] of Object.entries(animal["elephant"])){
   lab.push(key)
   val.push(value)
 }
-var myChart = new Chart(ctx, {
+var myChart_animal = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: lab,

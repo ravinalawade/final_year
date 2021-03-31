@@ -308,6 +308,9 @@ def addcamera(request):
         c=Camera()
         count=Camera.objects.count()
         c.camera_id='id_'+(str(count+1))
+        c.beat_id=request.POST['beat_id']
+        c.range_id=request.POST['range_id']
+        c.division_id=request.POST['division_id']
         c.latitude=request.POST['latitude']
         c.longitude=request.POST['longitude']
         c.status=request.POST['status']
