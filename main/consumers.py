@@ -159,8 +159,8 @@ class Animallist_socket(WebsocketConsumer):
         a=json.loads(text_data)
         for i in a["animals"]:
             id=i["id"]
-            i["latitude"]=Animal.objects.get(animal_id=id).latitude
-            i["longitude"]=Animal.objects.get(animal_id=id).longitude
+            i["latitude"]=Animal.objects.get(animal_id=id).latitude[-1]
+            i["longitude"]=Animal.objects.get(animal_id=id).longitude[-1]
         async_to_sync(get_channel_layer().group_send)(
             "list",
             {
