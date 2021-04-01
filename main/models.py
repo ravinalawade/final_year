@@ -68,7 +68,7 @@ class Local_report(models.Model):
     description = models.CharField(max_length=1000)
     address = models.CharField(max_length=1000)
     user_name = models.CharField(max_length=1000)
-    phone_no = models.CharField(max_length=10)
+    phone_no = models.CharField(max_length=200)
     image = models.BinaryField()
     latitude = models.FloatField()
     longitude = models.FloatField()
