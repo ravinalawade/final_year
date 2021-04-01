@@ -218,7 +218,7 @@ li a:hover {
          console.log(loginflag)
          // for setting up the initial page with button and table
          if (loginflag=="admin") {
-
+            reportsadmin={{main_dict|safe}}
 let divisiondropdown = $("<div>", {
    "class" : "dropdown",
 });
@@ -412,7 +412,7 @@ $(".tablefilter").append(divisiondropdown)
 .append(employeedropdown);
 
 } else if (loginflag=="division") {
-
+   reportsrange={{main_dict|safe}}
 let rangedropdown = $("<div>", {
    "class" : "dropdown",
 });
@@ -567,7 +567,7 @@ $(".tablefilter")
 .append(employeedropdown);
 
 } else if (loginflag=="range") {
-
+   reportsbeats={{main_dict|safe}}
 let beatsdropdown = $("<div>", {
    "class" : "dropdown",
 });
@@ -684,6 +684,7 @@ $(".tablefilter")
 .append(employeedropdown);
 
 } else if (loginflag=="beat") {
+   reports={{main_dict|safe}}
 let employeedropdown = $("<div>", {
    "class" : "dropdown",
 });
