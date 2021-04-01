@@ -918,6 +918,7 @@ class Local_report_api(APIView):
         r.address=request.data['address']
         r.user_name=request.data['user_name']
         r.phone_no=request.data['phone_number']
+        r.timestamp=str(datetime.datetime.now())
         r.save()
         return Response({"status":True})
 
