@@ -111,7 +111,19 @@ def task(request):
     role=request.session.get('flag')
     info=request.session.get('data')
     area=info['area']
-    if role == 'division_incharge':
+    if role =="admin":
+        data=[]
+        d=Division_tasks.objects.all()
+        r=Range_tasks.objects.all()
+        b=Beat_tasks.objects.all()
+        for i in d:
+            data.append(i)
+        for i in r:
+            data.append(i)
+        for i in b:
+            data.append(i)
+        w=[]
+    elif role == 'division_incharge':
         w=Division_range.objects.filter(division_id=area)
         data=Division_tasks.objects.filter(task_from=area)
     elif role == 'range_incharge':
