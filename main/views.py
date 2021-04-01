@@ -917,7 +917,7 @@ class Local_report_api(APIView):
         r.report_name=request.data['report_name']
         r.address=request.data['address']
         r.user_name=request.data['user_name']
-        r.phone_no=request.data['phone_no']
+        r.phone_no=request.data['phone_number']
         r.save()
         return Response({"status":True})
 
