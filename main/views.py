@@ -926,6 +926,7 @@ class Taskreport(APIView):
         t.description=request.data["report"]
         t.latitude=request.data["latitude"]
         t.longitude=request.data["longitude"]
+        t.image=bytes(request.data['image'], 'utf-8')
         t.save()
         return Response({"status":True})
 
