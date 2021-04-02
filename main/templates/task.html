@@ -225,7 +225,7 @@ li a:hover {
     <span aria-hidden="true">&times;</span>
     </button>
     </div>
-    <div class="modal-body container text-center">
+    <div class="modal-body container text-center" id="mbody">
         <!-- <img src="data:image/png;base64," alt="" width="200" height="280" > -->
         <img src="{% static 'pratik.jpg' %}" alt="" width="300" height="280" >
         <h4>Description:</h4>
@@ -333,7 +333,7 @@ li a:hover {
                 // alert(response);
                 var data=JSON.parse(response);
                 console.log(data)
-                document.getElementById('mbody').innerHTML="<div> DESCRIPTION </div>"+
+                document.getElementById('mbody').innerHTML="<div> DESCRIPTION "+data['description']+"</div><br>"+
                 " <img src='data:image/png;base64,"+data['image']+" ' alt='Billy Adams'/>"
             }
           });
