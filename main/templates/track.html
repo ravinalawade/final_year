@@ -122,7 +122,7 @@ p{
           <a href='{% url 'reportlist' %}'>Reports</a>
           <a href='{% url 'localreportlist' %}'>Local Reports</a>
           <a href='{% url 'stats' %}'>Statistics</a>
-          <a href='{% url 'login' %}'>Logout</a>
+          <a href='{% url 'logout_server' %}'>Logout</a>
         </div>
     </div>
     <select id="rows" onchange="change(this.value)" style="display: block;z-index: 2;position: absolute;left: 200px;">
@@ -136,8 +136,7 @@ p{
 function list(){
     console.log({{arr|safe}})
     for (var i in arr){
-        var r=arr[i].split('->')
-        var r=r[1]
+        var r=arr[i]
         document.getElementById('rows').innerHTML+="<option value="+r+">"+arr[i]+"</option>"
     }
     change('0')
@@ -169,7 +168,7 @@ function change(beat_id){
     // We use D3 to fetch the JSON here so that we can parse and use it separately
     // from GL JS's use in the added source. You can use any request method (library
     // or otherwise) that you want.
-    console.log("in fun")
+    console.log("in fun",beat_id)
     if (coord[beat_id])
     var coordinates=coord[beat_id]
     else

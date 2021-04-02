@@ -476,37 +476,17 @@ def stats(request):
 def track(request):
     for key, value in request.session.items():
         print('{} => {}'.format(key, value))
-    if request.session['flag']=='division_incharge':
-        div=request.session['data']['area']
-        ran=Division_range.objects.filter(division_id=div)
-        beat=[]
-        arr=[]
-        data={}
-        for i in ran:
-            b=Range_beat.objects.filter(range_id=i.range_id)
-            for j in b:
-                beat.append(j.beat_id)
-                arr.append(str(i.range_id)+"->"+str(j.beat_id))
-                print(j.beat_id)
-                f=Beat_employee.objects.get(beat_id=j.beat_id)
-                print(f.empid)
-                emp=Forest_employee.objects.get(empid=f.empid)
-                print(emp.empid)
-                if j.beat_id in data:
-                    for k in range(len(emp.latitude)):
-                        temp=[]
-                        temp.append(emp.longitude[k])
-                        temp.append(emp.latitude[k])
-                        data[j.beat_id].append(temp)
-                else:
-                    data[j.beat_id]=[]
-                    for k in range(len(emp.latitude)):
-                        temp=[]
-                        temp.append(emp.longitude[k])
-                        temp.append(emp.latitude[k])
-                        data[j.beat_id].append(temp)
-                
-    print(data)
+    data={}
+    arr=[]
+    a=Animal.objects.all()
+    for i in a:
+        arr.append(i.animal_id+"-"+i.animal_name)
+        data[i.animal_id+"-"+i.animal_name]=[]
+        for j in range(len(i.latitude)):
+            temp=[i.longitude[j],i.latitude[j]]
+            data[i.animal_id+"-"+i.animal_name].append(temp)
+            
+    print(data,arr)
     return render(request,"track.html",{'data':data,'arr':arr})
 
 def allotrange(request):
