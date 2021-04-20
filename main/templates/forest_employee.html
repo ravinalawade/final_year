@@ -172,9 +172,10 @@ p{
     
         chatSocket.onmessage = function (event) {
             console.log(event);
+            data=JSON.parse(event.data)
             swal({
                 title: data['type'].toUpperCase(),
-                text: "<br>At camera id: "+data['camera_id'],
+                text: "At camera id: "+data['camera_id'],
                 type: "warning",
                 confirmButtonText: "OK",
                 allowOutsideClick: true
