@@ -162,7 +162,7 @@ def task(request):
             w.append(Forest_employee.objects.get(empid=empid))
 
     flag=role
-    print(data,flag,w)
+    # print(data,flag,w)
     return render(request,"task.html",{'data':data,'flag':flag,"workers":w})
 
 def addtask(request):
@@ -390,8 +390,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     h=so
 
     elephant={}
@@ -404,8 +404,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     elephant=so
 
     macaque={}
@@ -418,8 +418,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     macaque=so
     lion={}
     ani=Logs.objects.filter(action="lion")
@@ -431,8 +431,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     lion=so
     tiger={}
     ani=Logs.objects.filter(action="tiger")
@@ -444,8 +444,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     tiger=so
     civet={}
     ani=Logs.objects.filter(action="civet")
@@ -457,8 +457,8 @@ def stats(request):
         else:
             c[cam.beat_id]=1
     so=dict(sorted(c.items(), key=lambda item: item[1] ,reverse=True))
-    for i in so.keys():
-        print(i,so[i])
+    # for i in so.keys():
+    #     print(i,so[i])
     civet=so
 
     animal={"elephant":elephant,"lion":lion,"tiger":tiger,"macaque":macaque,"civet":civet}
@@ -679,7 +679,7 @@ def reportlist(request):
         main_dict=e
     
             #sort the array
-    print(main_dict,work_id)
+    # print(main_dict,work_id)
     return render(request,"reportlist.html",{"main_dict":main_dict,"flag":{'flag':work_id}})
 
 def localreportlist(request):
