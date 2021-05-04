@@ -6,6 +6,8 @@
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
 <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; } 
@@ -190,17 +192,6 @@ p{
     </ul>
 <div id="map"></div>
 
-<div id="popup1" class="overlay">
-    <div class="popup">
-      <h2>Here i am</h2>
-      <!-- <a class="close" href="#">&times;</a> -->
-      
-      <div id="content">
-        Thank to pop me out of that button, but now i'm done so you can close this window.
-      </div>
-      <button id="close" onclick="ok()">OK</button>
-    </div>
-  </div>
 
 <script>
     console.log('Sending connection')
@@ -212,19 +203,16 @@ p{
 
     chatSocket.onmessage = function (event) {
         console.log(event);
-        var pop=document.getElementById("popup1")
-        var message=document.getElementById("content")
-        message.innerHTML=event.data
-        pop.style.visibility="visible"
-        pop.style.opacity="1"
+        data=JSON.parse(event.data)
+            swal({
+                title: data['type'].toUpperCase(),
+                text: "At camera id: "+data['camera_id'],
+                type: "warning",
+                confirmButtonText: "OK",
+                allowOutsideClick: true
+                },
+                )
         }
-
-    function ok(){
-        console.log("ok");
-        var pop=document.getElementById("popup1")
-        pop.style.visibility="hidden"
-        pop.style.opacity="0"
-    }
 
     //Access token
 	mapboxgl.accessToken = 'pk.eyJ1Ijoib21rYXIyMSIsImEiOiJjanRxc3hoamcwZDNtNGRxZGNnaXF2ZHU3In0.Ovq0lb6DSdnLkIMMb32UPA';
