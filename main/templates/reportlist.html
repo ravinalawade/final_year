@@ -758,6 +758,21 @@ $("#exampleModal").on("hide.bs.modal", function(){
 $(".maincontainer").on("click", ".tablerow-admin", function(){
    let mainid = $(this).attr("id").split("_");
    console.log(mainid);
+   var img
+   $.ajax({
+        type: "POST",
+        url: "{% url 'reportimage' %}",  
+        dataType:'json', 
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+              rid:reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["rep_id"]},   /* Passing the text data */
+        success:  function(response){
+               console.log(response);
+               img=reponse["image"]
+           },
+        error: function(response){
+            console.log(response);
+        }
+        });
 
    let reportid = $("<h2>", {
       "text" : reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["rep_id"],
@@ -769,7 +784,7 @@ $(".maincontainer").on("click", ".tablerow-admin", function(){
       "text" : reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["desc"],
    });
    let image = $("<img>", {
-      "src" : "data:image/png;base64,"+reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["image"],
+      "src" : "data:image/png;base64,"+img,
    });
    let latitude = $("<p>", {
       "text" : reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["latitude"],
@@ -796,7 +811,21 @@ $(".maincontainer").on("click", ".tablerow-admin", function(){
 // code for row click
 $(".maincontainer").on("click", ".tablerow-division", function(){
    let mainid = $(this).attr("id").split("_");
-
+   var img
+   $.ajax({
+        type: "POST",
+        url: "{% url 'reportimage' %}",  
+        dataType:'json', 
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+              rid:reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["rep_id"]},   /* Passing the text data */
+        success:  function(response){
+               console.log(response);
+               img=reponse["image"]
+           },
+        error: function(response){
+            console.log(response);
+        }
+        });
    let reportid = $("<h2>", {
       "text" : reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["rep_id"],
    });
@@ -807,7 +836,7 @@ $(".maincontainer").on("click", ".tablerow-division", function(){
       "text" : reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["desc"],
    });
    let image = $("<img>", {
-      "src" : "data:image/png;base64,"+reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["image"],
+      "src" : "data:image/png;base64,"+img,
    });
    let latitude = $("<p>", {
       "text" : reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["latitude"],
@@ -834,7 +863,21 @@ $(".maincontainer").on("click", ".tablerow-division", function(){
 // code for row click
 $(".maincontainer").on("click", ".tablerow-range", function(){
    let mainid = $(this).attr("id").split("_");
-
+   var img
+   $.ajax({
+        type: "POST",
+        url: "{% url 'reportimage' %}",  
+        dataType:'json', 
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+              rid:reportsbeats[mainid[0]][mainid[1]][mainid[2]]["rep_id"]},   /* Passing the text data */
+        success:  function(response){
+               console.log(response);
+               img=reponse["image"]
+           },
+        error: function(response){
+            console.log(response);
+        }
+        });
    let reportid = $("<h2>", {
       "text" : reportsbeats[mainid[0]][mainid[1]][mainid[2]]["rep_id"],
    });
@@ -845,7 +888,7 @@ $(".maincontainer").on("click", ".tablerow-range", function(){
       "text" : reportsbeats[mainid[0]][mainid[1]][mainid[2]]["desc"],
    });
    let image = $("<img>", {
-      "src" : "data:image/png;base64,"+reportsbeats[mainid[0]][mainid[1]][mainid[2]]["image"],
+      "src" : "data:image/png;base64,"+img,
    });
    let latitude = $("<p>", {
       "text" : reportsbeats[mainid[0]][mainid[1]][mainid[2]]["latitude"],
@@ -873,6 +916,21 @@ $(".maincontainer").on("click", ".tablerow-range", function(){
 $(".maincontainer").on("click", ".tablerow-beats", function(){
    let mainid = $(this).attr("id").split("_");
    console.log(mainid);
+   var img
+   $.ajax({
+        type: "POST",
+        url: "{% url 'reportimage' %}",  
+        dataType:'json', 
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+              rid:reports[mainid[0]][mainid[1]]["rep_id"]},   /* Passing the text data */
+        success:  function(response){
+               console.log(response);
+               img=reponse["image"]
+           },
+        error: function(response){
+            console.log(response);
+        }
+        });
    let reportid = $("<h2>", {
       "text" : reports[mainid[0]][mainid[1]]["rep_id"],
    });
@@ -883,7 +941,7 @@ $(".maincontainer").on("click", ".tablerow-beats", function(){
       "text" : reports[mainid[0]][mainid[1]]["desc"],
    });
    let image = $("<img>", {
-      "src" : "data:image/png;base64,"+reports[mainid[0]][mainid[1]]["image"],
+      "src" : "data:image/png;base64,"+img,
    });
    let latitude = $("<p>", {
       "text" : reports[mainid[0]][mainid[1]]["latitude"],

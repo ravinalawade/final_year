@@ -682,6 +682,10 @@ def reportlist(request):
     # print(main_dict,work_id)
     return render(request,"reportlist.html",{"main_dict":main_dict,"flag":{'flag':work_id}})
 
+def reportimage(request):
+    rid=request.POST["rid"]
+    report=Report.objects.get(rid=rid)
+    return JsonResponse({"image":bytes(report.image).decode("utf-8")})
 def localreportlist(request):
     r=Local_report.objects.all()
     main_dict=[]

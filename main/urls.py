@@ -22,6 +22,7 @@ urlpatterns = [
     # path('addforest_employee', views.addforest_employee, name='addforest_employee'),
     # path('researcherlist', views.researcherlist, name='researcherlist'),
     path('location',views.location,name='location'),
+    path('reportimage',views.reportimage,name='reportimage'),
     path('geojson',views.geojson,name='geojson'),
     # path('editresearcher/<id>/',views.editresearcher,name='editresearcher'),
     # path('report',views.report,name='report'),
