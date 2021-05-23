@@ -563,7 +563,7 @@ def reportlist(request):
                             rep_dic['timestamp']=l.timestamp
                             rep_dic['emp_id']=l.empid
                             rep_dic['description']=l.description
-                            rep_dic['image']=bytes(l.image).decode("utf-8") 
+                            rep_dic['image']="image"
                             rep_dic['latitude']=l.latitude
                             rep_dic['longitude']=l.longitude
                             e[k.empid].append(rep_dic)
@@ -608,7 +608,7 @@ def reportlist(request):
                         rep_dic['timestamp']=l.timestamp
                         rep_dic['emp_id']=l.empid
                         rep_dic['description']=l.description
-                        rep_dic['image']=bytes(l.image).decode("utf-8") 
+                        rep_dic['image']="image"
                         rep_dic['latitude']=l.latitude
                         rep_dic['longitude']=l.longitude
                         e[k.empid].append(rep_dic)
@@ -644,7 +644,7 @@ def reportlist(request):
                     rep_dic['timestamp']=l.timestamp
                     rep_dic['emp_id']=l.empid
                     rep_dic['description']=l.description
-                    rep_dic['image']=bytes(l.image).decode("utf-8") 
+                    rep_dic['image']="image"
                     rep_dic['latitude']=l.latitude
                     rep_dic['longitude']=l.longitude
                     e[k.empid].append(rep_dic)
@@ -672,7 +672,7 @@ def reportlist(request):
                 rep_dic['timestamp']=l.timestamp
                 rep_dic['emp_id']=l.empid
                 rep_dic['description']=l.description
-                rep_dic['image']=bytes(l.image).decode("utf-8") 
+                rep_dic['image']="image"
                 rep_dic['latitude']=l.latitude
                 rep_dic['longitude']=l.longitude
                 e[k.empid].append(rep_dic)
