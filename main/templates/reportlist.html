@@ -179,10 +179,11 @@ li a:hover {
 
       <div class="container-fluid maincontainer" style="margin-top: 60px;"></div>
       <!-- JS, Popper.js, and jQuery -->
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
       <script>
          loginflag = "admin"; 
          // values - admin, division, range, beat
@@ -758,22 +759,8 @@ $("#exampleModal").on("hide.bs.modal", function(){
 $(".maincontainer").on("click", ".tablerow-admin", function(){
    let mainid = $(this).attr("id").split("_");
    console.log(mainid);
-   var img
-   $.ajax({
-        type: "POST",
-        url: "{% url 'reportimage' %}",  
-        dataType:'json', 
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              rid:reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["rep_id"]},   /* Passing the text data */
-        success:  function(response){
-               console.log(response);
-               img=reponse["image"]
-           },
-        error: function(response){
-            console.log(response);
-        }
-        });
-
+   var img=getimage(reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["rep_id"])
+   
    let reportid = $("<h2>", {
       "text" : reportsadmin[mainid[0]][mainid[1]][mainid[2]][mainid[3]][mainid[4]]["rep_id"],
    });
@@ -811,21 +798,7 @@ $(".maincontainer").on("click", ".tablerow-admin", function(){
 // code for row click
 $(".maincontainer").on("click", ".tablerow-division", function(){
    let mainid = $(this).attr("id").split("_");
-   var img
-   $.ajax({
-        type: "POST",
-        url: "{% url 'reportimage' %}",  
-        dataType:'json', 
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              rid:reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["rep_id"]},   /* Passing the text data */
-        success:  function(response){
-               console.log(response);
-               img=reponse["image"]
-           },
-        error: function(response){
-            console.log(response);
-        }
-        });
+   var img=getimage(reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["rep_id"])
    let reportid = $("<h2>", {
       "text" : reportsrange[mainid[0]][mainid[1]][mainid[2]][mainid[3]]["rep_id"],
    });
@@ -863,21 +836,7 @@ $(".maincontainer").on("click", ".tablerow-division", function(){
 // code for row click
 $(".maincontainer").on("click", ".tablerow-range", function(){
    let mainid = $(this).attr("id").split("_");
-   var img
-   $.ajax({
-        type: "POST",
-        url: "{% url 'reportimage' %}",  
-        dataType:'json', 
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              rid:reportsbeats[mainid[0]][mainid[1]][mainid[2]]["rep_id"]},   /* Passing the text data */
-        success:  function(response){
-               console.log(response);
-               img=reponse["image"]
-           },
-        error: function(response){
-            console.log(response);
-        }
-        });
+   var img=getimage(reportsbeats[mainid[0]][mainid[1]][mainid[2]]["rep_id"])
    let reportid = $("<h2>", {
       "text" : reportsbeats[mainid[0]][mainid[1]][mainid[2]]["rep_id"],
    });
@@ -916,21 +875,8 @@ $(".maincontainer").on("click", ".tablerow-range", function(){
 $(".maincontainer").on("click", ".tablerow-beats", function(){
    let mainid = $(this).attr("id").split("_");
    console.log(mainid);
-   var img
-   $.ajax({
-        type: "POST",
-        url: "{% url 'reportimage' %}",  
-        dataType:'json', 
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-              rid:reports[mainid[0]][mainid[1]]["rep_id"]},   /* Passing the text data */
-        success:  function(response){
-               console.log(response);
-               img=reponse["image"]
-           },
-        error: function(response){
-            console.log(response);
-        }
-        });
+   var img=getimage(reports[mainid[0]][mainid[1]]["rep_id"])
+   
    let reportid = $("<h2>", {
       "text" : reports[mainid[0]][mainid[1]]["rep_id"],
    });
@@ -1980,6 +1926,25 @@ $(".tablefilter").on("click", ".employeebutton", function(){
    }
 });
 });
+function getimage(rid){
+   var img
+   $.ajax({
+        type: "POST",
+        url: "{% url 'reportimage' %}",  
+        dataType:'json', 
+        async:false,
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+              rid:rid},   /* Passing the text data */
+        success:  function(response){
+               console.log(response);
+               img=response["image"]
+           },
+        error: function(response){
+            console.log(response);
+        }
+        });
+        return(img)
+}
 </script>
 </body>
 </html>
