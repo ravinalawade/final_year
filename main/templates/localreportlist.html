@@ -698,15 +698,15 @@ reports = data
  $(".maincontainer").on("click", ".tablerow-beats", function(){
  mainid = $(this).attr("id");
 
- reportid = $("<h2>", {
- "text" : reports[mainid]["rep_id"],
- });
- empid = $("<h3>", {
- "text" : reports[mainid]["empid"],
- });
- desc = $("<h5>", {
- "text" : reports[mainid]["desc"],
- });
+//  reportid = $("<h2>", {
+//  "text" : reports[mainid]["rep_id"],
+//  });
+//  empid = $("<h3>", {
+//  "text" : reports[mainid]["empid"],
+//  });
+//  desc = $("<h5>", {
+//  "text" : reports[mainid]["desc"],
+//  });
  image = $("<img>", {
  "src" : "data:image/png;base64,"+reports[mainid]["image"],
  });
@@ -721,9 +721,9 @@ reports = data
  });
 
  $("#exampleModal").find(".modal-body")
- .append(reportid)
- .append(empid)
- .append(desc)
+//  .append(reportid)
+//  .append(empid)
+//  .append(desc)
  .append(image)
  .append(latitude)
  .append(longitude)
