@@ -19,6 +19,7 @@ from django.http import HttpResponse,JsonResponse
 import json
 import xlsxwriter
 import datetime
+from dateutil.tz import gettz
 
 ############################SERVER########################################
 def logout_server(request):
@@ -624,7 +625,7 @@ def reportlist(request):
     
     elif work_id=='range_incharge':
         range_id=data['area']
-        lbeat=Range_beat.objects.filter(range_id=i.range_id)
+        lbeat=Range_beat.objects.filter(range_id=range_id)
         # list of beats in a particular range
         be={}
         for j in lbeat:
@@ -914,7 +915,7 @@ class Local_report_api(APIView):
         r.address=request.data['address']
         r.user_name=request.data['user_name']
         r.phone_no=request.data['phone_number']
-        r.timestamp=str(datetime.datetime.now())
+        r.timestamp=str(datetime.datetime.now(tz=gettz('Asia/Kolkata')).strftime("%Y-%m-%d %H:%M:%S"))
         r.save()
         return Response({"status":True})
 

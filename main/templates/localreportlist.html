@@ -129,48 +129,19 @@ li a:hover {
 
     chatSocket.onmessage = function (event) {
         console.log(event);
-        var pop=document.getElementById("popup1")
-        var message=document.getElementById("content")
-        message.innerHTML=event.data
-        pop.style.visibility="visible"
-        pop.style.opacity="1"
+        data=JSON.parse(event.data)
+        swal({
+            title: data['type'].toUpperCase(),
+            text: "At camera id: "+data['camera_id'],
+            type: "warning",
+            confirmButtonText: "OK",
+            allowOutsideClick: true
+            },
+            )
         }
 
-    function ok(){
-        console.log("ok");
-        var pop=document.getElementById("popup1")
-        pop.style.visibility="hidden"
-        pop.style.opacity="0"
-    }
+    
   </script>
-  <div id="popup1" class="overlay">
-    <div class="popup">
-      <h2>Here i am</h2>
-      <!-- <a class="close" href="#">&times;</a> -->
-      
-      <div id="content">
-        Thank to pop me out of that button, but now i'm done so you can close this window.
-      </div>
-      <button id="close" onclick="ok()">OK</button>
-    </div>
-  </div>
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-content">
- <div class="modal-header">
- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
- <span aria-hidden="true">&times;</span>
- </button>
- </div>
- <div class="modal-body container text-center"></div>
- <div class="modal-footer">
- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
- </div>
- </div>
- </div>
- </div>
 
  <ul>
     <!-- <li><a href="#about">Tab</a></li>
@@ -595,7 +566,7 @@ reports = data
  });
  timestampcol = $("<td>", {
  "class" : "text-center",
- "text" : '07-08-2020:17.45',
+ "text" : reports[id]["timestamp"],
  });
  row.append(reportidcol).append(empidcol).append(timestampcol);
  tbody.append(row);
