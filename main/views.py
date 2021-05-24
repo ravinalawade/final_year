@@ -697,6 +697,7 @@ def localreportlist(request):
         rep_dic['image']=bytes(lr.image).decode("utf-8") 
         rep_dic['latitude']=lr.latitude
         rep_dic['longitude']=lr.longitude
+        rep_dic['timestamp']=lr.timestamp
         main_dict.append(rep_dic)
     return render(request,"localreportlist.html",{"main_dict":main_dict})
 
